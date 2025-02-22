@@ -21,8 +21,8 @@ import { DetailProductComponent } from './detail-product/detail-product.componen
   providers: [],
   bootstrap: [
     // HomeComponent,
-    DetailProductComponent
-    // OrderComponent
+    // DetailProductComponent,
+    OrderComponent
   ]
 })
 export class AppModule { }
