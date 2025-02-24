@@ -1,42 +1,72 @@
-# See https://docs.github.com/get-started/getting-started-with-git/ignoring-files for more about ignoring files.
+# ==========================
+# 🔹 Angular (shopapp-angular)
+# ==========================
 
 # Compiled output
-/dist
-/tmp
-/out-tsc
-/bazel-out
+shopapp-angular/dist/
+shopapp-angular/tmp/
+shopapp-angular/out-tsc/
+shopapp-angular/bazel-out/
 
 # Node
-/node_modules
+shopapp-angular/node_modules/
 npm-debug.log
 yarn-error.log
 
-# IDEs and editors
+# Angular cache
+shopapp-angular/.angular/cache
+
+# Miscellaneous
+shopapp-angular/.sass-cache/
+shopapp-angular/connect.lock
+shopapp-angular/coverage/
+shopapp-angular/libpeerconnection.log
+shopapp-angular/testem.log
+shopapp-angular/typings/
+
+# ==========================
+# 🔹 Spring Boot (shopapp-backend)
+# ==========================
+
+# Maven build output
+shopapp-backend/target/
+!shopapp-backend/.mvn/wrapper/maven-wrapper.jar
+!**/src/main/**/target/
+!**/src/test/**/target/
+
+# Build output
+shopapp-backend/build/
+!**/src/main/**/build/
+!**/src/test/**/build/
+
+# IDEs and Editors
 .idea/
 .project
 .classpath
-.c9/
-*.launch
+.apt_generated
+.factorypath
 .settings/
-*.sublime-workspace
+.springBeans
+.sts4-cache
+
+# IntelliJ IDEA
+*.iws
+*.iml
+*.ipr
+
+# NetBeans
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
 
 # Visual Studio Code
-.vscode/*
-!.vscode/settings.json
-!.vscode/tasks.json
-!.vscode/launch.json
-!.vscode/extensions.json
-.history/*
+.vscode/
+.history/
 
-# Miscellaneous
-/.angular/cache
-.sass-cache/
-/connect.lock
-/coverage
-/libpeerconnection.log
-testem.log
-/typings
-
-# System files
+# ==========================
+# 🔹 Hệ thống (Windows, macOS, Linux)
+# ==========================
 .DS_Store
 Thumbs.db
