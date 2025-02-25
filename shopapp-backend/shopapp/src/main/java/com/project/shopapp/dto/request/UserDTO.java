@@ -1,4 +1,4 @@
-package com.project.shopapp.dto;
+package com.project.shopapp.dto.request;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.project.shopapp.utils.PhoneNumber;
@@ -9,7 +9,7 @@ import java.util.Date;
 
 @Data
 @Builder
-public class User {
+public class UserDTO {
     @JsonProperty("fullname")
     @NotNull(message = "full name of user must be not null")
     private String fullName;

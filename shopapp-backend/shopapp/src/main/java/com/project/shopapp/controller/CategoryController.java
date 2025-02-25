@@ -1,7 +1,7 @@
 package com.project.shopapp.controller;
 
 
-import com.project.shopapp.dto.Category;
+import com.project.shopapp.dto.request.CategoryDTO;
 import com.project.shopapp.service.impl.CategoryService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -19,11 +19,12 @@ public class CategoryController {
     private CategoryService categoryService;
 
     @GetMapping("/list")
-    public ResponseEntity<String> getAllCategories(@RequestParam("page") int page, @RequestParam("limit") int limit) {
+    public ResponseEntity<String> getAllCategories(@RequestParam(defaultValue = "0", required = false) int page,
+                                                   @RequestParam(defaultValue = "0", required = false) int limit) {
         return ResponseEntity.ok(String.format("getAllCategories, page = %d, limit = %d", page, limit));
     }
     @PostMapping("")
-    public ResponseEntity<?> createCategory(@Valid @RequestBody Category category, BindingResult result) {
+    public ResponseEntity<?> createCategory(@Valid @RequestBody CategoryDTO category, BindingResult result) {
         if(result.hasErrors()) {
             List<String> errorMessages = result.getFieldErrors()
                     .stream()
@@ -34,12 +35,12 @@ public class CategoryController {
         return ResponseEntity.ok("This is insertCategory " + category);
 
     }
-    @PutMapping("/{id}")
-    public ResponseEntity<String> updateCategory(@PathVariable Long id) {
+    @PutMapping("/{cateId}")
+    public ResponseEntity<String> updateCategory(@Valid @PathVariable("cateId") Long id) {
         return ResponseEntity.ok("updateCategory with id = " + id);
     }
-    @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteCategory(@PathVariable Long id) {
+    @DeleteMapping("/{cateId}")
+    public ResponseEntity<String> deleteCategory(@Valid @PathVariable("cateId") Long id) {
         return ResponseEntity.ok("deleteCategory with id = " + id);
     }
 }

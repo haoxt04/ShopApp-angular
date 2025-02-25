@@ -1,6 +1,6 @@
 package com.project.shopapp.controller;
 
-import com.project.shopapp.dto.Order;
+import com.project.shopapp.dto.request.OrderDTO;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -13,7 +13,7 @@ import java.util.List;
 @RequestMapping("${api.prefix}/orders")
 public class OrderController {
     @PostMapping("")
-    public ResponseEntity<?> createOrder(@RequestBody @Valid Order order, BindingResult result) {
+    public ResponseEntity<?> createOrder(@Valid @RequestBody OrderDTO order, BindingResult result) {
         try {
             if(result.hasErrors()) {
                 List<String> errorMessages = result.getFieldErrors()
@@ -26,8 +26,8 @@ public class OrderController {
         }
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<?> getProductById(@PathVariable("id") Long orderId) {
+    @GetMapping("/{orderId}")
+    public ResponseEntity<?> getProductById(@Valid @PathVariable("orderId") Long orderId) {
         try {
             return ResponseEntity.ok("Get order by id = " + orderId);
         }catch (Exception e) {
@@ -35,18 +35,19 @@ public class OrderController {
         }
     }
     @GetMapping("")
-    public ResponseEntity<?> getListOfOrder(@RequestParam("page") int page, @RequestParam("limit") int size) {
-        return ResponseEntity.ok("get list of Order successfully");
+    public ResponseEntity<?> getListOfOrder(@RequestParam(defaultValue = "0", required = false) int page,
+                                            @RequestParam(defaultValue = "0", required = false) int limit) {
+        return ResponseEntity.ok("get list of OrderDTO successfully");
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/{orderId}")
     // công việc của admin
-    public ResponseEntity<?> updateOrder(@Valid @PathVariable Long id, @Valid @RequestBody Order order) {
+    public ResponseEntity<?> updateOrder(@Valid @PathVariable("orderId") Long id, @Valid @RequestBody OrderDTO order) {
         return ResponseEntity.ok("update order successfully");
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteOrder(@Valid @PathVariable Long id) {
+    @DeleteMapping("/{orderId}")
+    public ResponseEntity<?> deleteOrder(@Valid @PathVariable("orderId") Long id) {
         // xóa mềm => cập nhật trường active = false
         return ResponseEntity.ok("delete order successful");
     }

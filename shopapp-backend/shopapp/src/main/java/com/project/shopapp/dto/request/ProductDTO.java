@@ -1,4 +1,4 @@
-package com.project.shopapp.dto;
+package com.project.shopapp.dto.request;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
@@ -9,7 +9,7 @@ import java.util.List;
 
 @Data
 @Builder
-public class Product {
+public class ProductDTO {
     @NotNull(message = "product name must be not null")
     private String name;
 

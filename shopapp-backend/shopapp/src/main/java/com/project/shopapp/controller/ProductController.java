@@ -1,5 +1,5 @@
 package com.project.shopapp.controller;
-import com.project.shopapp.dto.Product;
+import com.project.shopapp.dto.request.ProductDTO;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -22,7 +22,7 @@ import java.util.UUID;
 @RequestMapping("${api.prefix}/products")
 public class ProductController {
     @PostMapping(value = "", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<?> createProduct(@Valid @ModelAttribute Product product, BindingResult result) {
+    public ResponseEntity<?> createProduct(@Valid @ModelAttribute ProductDTO product, BindingResult result) {
         try {
             if (result.hasErrors()) {
                 List<String> errorMessages = result.getFieldErrors()
@@ -76,17 +76,18 @@ public class ProductController {
     }
 
     @GetMapping("")
-    public ResponseEntity<String> getProducts(@RequestParam("page") int page, @RequestParam("limit") int limit) {
+    public ResponseEntity<String> getProducts(@RequestParam(defaultValue = "0", required = false) int page,
+                                              @RequestParam(defaultValue = "0", required = false) int limit) {
         return ResponseEntity.ok("getProducts here");
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<String> getProductById(@PathVariable("id") String productId) {
+    @GetMapping("/{proId}")
+    public ResponseEntity<String> getProductById(@Valid @PathVariable("proId") Long productId) {
         return ResponseEntity.ok("Product with ID: " + productId);
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteProduct(@PathVariable long id) {
+    @DeleteMapping("/{proId}")
+    public ResponseEntity<String> deleteProduct(@Valid @PathVariable("proId") Long id) {
         return ResponseEntity.ok(String.format("Product with id = %d deleted successfully", id));
     }
 }

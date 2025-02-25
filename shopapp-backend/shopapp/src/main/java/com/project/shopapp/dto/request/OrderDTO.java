@@ -1,4 +1,4 @@
-package com.project.shopapp.dto;
+package com.project.shopapp.dto.request;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.project.shopapp.utils.PhoneNumber;
 import jakarta.validation.constraints.Email;
@@ -9,7 +9,7 @@ import lombok.Data;
 
 @Data
 @Builder
-public class Order {
+public class OrderDTO {
     @JsonProperty("user_id")
     @Min(value = 1, message = "userId must be greater than 0")
     private Long userId;

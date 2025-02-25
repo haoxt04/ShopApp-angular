@@ -1,4 +1,4 @@
-package com.project.shopapp.dto;
+package com.project.shopapp.dto.request;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.project.shopapp.utils.PhoneNumber;
@@ -8,7 +8,7 @@ import lombok.Data;
 
 @Data
 @Builder
-public class UserLogin {
+public class UserLoginDTO {
     @JsonProperty("phone_number")
     @PhoneNumber(message = "phone invalid format")
     private String phoneNumber;
