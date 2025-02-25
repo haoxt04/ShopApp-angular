@@ -1,17 +1,17 @@
 package com.project.shopapp.model;
 
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Data;
 
-@Entity
+@Table(name = "roles")
 @Data
-@Table(name = "categories")
-public class Category extends BaseEntity {
+@Builder
+public class Role {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     @Column(name = "name", nullable = false)
     private String name;
-
-
 }
