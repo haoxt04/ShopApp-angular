@@ -1,19 +1,18 @@
 package com.project.shopapp.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import jakarta.validation.constraints.NotBlank;
-import lombok.AllArgsConstructor;
+import com.project.shopapp.utils.PhoneNumber;
+import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 @Data
 @Builder
 public class UserLogin {
     @JsonProperty("phone_number")
-    @NotBlank(message = "Phone number is required")
+    @PhoneNumber(message = "phone invalid format")
     private String phoneNumber;
 
-    @NotBlank(message = "Password cannot be blank")
+    @NotNull(message = "password must be not null")
     private String password;
 }

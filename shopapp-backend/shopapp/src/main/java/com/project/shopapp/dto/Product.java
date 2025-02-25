@@ -7,15 +7,14 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
-@Data//toString
+@Data
+@Builder
 public class Product {
-    @NotBlank(message = "Title is required")
-    @Size(min = 3, max = 200, message = "Title must be between 3 and 200 characters")
+    @NotNull(message = "product name must be not null")
     private String name;
 
-    @Min(value = 0, message = "Price must be greater than or equal to 0")
-    @Max(value = 10000000, message = "Price must be less than or equal to 10,000,000")
-    private Float price;
+    @Min(value = 0, message = "product price must be greater than or equal to 0")
+    private float price;
 
     private String thumbnail;
 
@@ -24,6 +23,7 @@ public class Product {
     @JsonProperty("category_id")
     private String categoryId;
 
+    @NotEmpty(message = "files of product must be not empty")
     private List<MultipartFile> files;
 
 }

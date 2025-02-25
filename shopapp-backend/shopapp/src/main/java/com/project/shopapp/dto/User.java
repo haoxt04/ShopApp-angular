@@ -1,7 +1,7 @@
 package com.project.shopapp.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import jakarta.validation.constraints.NotBlank;
+import com.project.shopapp.utils.PhoneNumber;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
@@ -11,18 +11,21 @@ import java.util.Date;
 @Builder
 public class User {
     @JsonProperty("fullname")
+    @NotNull(message = "full name of user must be not null")
     private String fullName;
 
     @JsonProperty("phone_number")
-    @NotBlank(message = "Phone number is required")
+    @PhoneNumber(message = "phone invalid format")
     private String phoneNumber;
 
+    @NotNull(message = "address of user must be not null")
     private String address;
 
-    @NotBlank(message = "Password cannot be blank")
+    @NotNull(message = "password must be not null")
     private String password;
 
     @JsonProperty("retype_password")
+    @NotNull(message = "password must be not null")
     private String retypePassword;
 
     @JsonProperty("date_of_birth")
