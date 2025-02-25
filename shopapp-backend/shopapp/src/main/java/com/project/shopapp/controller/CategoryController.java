@@ -2,12 +2,11 @@ package com.project.shopapp.controller;
 
 
 import com.project.shopapp.dto.request.CategoryDTO;
+import com.project.shopapp.dto.response.ResponseData;
 import com.project.shopapp.service.impl.CategoryService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,29 +17,29 @@ import java.util.List;
 public class CategoryController {
     private CategoryService categoryService;
 
-    @GetMapping("/list")
-    public ResponseEntity<String> getAllCategories(@RequestParam(defaultValue = "0", required = false) int page,
-                                                   @RequestParam(defaultValue = "0", required = false) int limit) {
-        return ResponseEntity.ok(String.format("getAllCategories, page = %d, limit = %d", page, limit));
-    }
     @PostMapping("")
-    public ResponseEntity<?> createCategory(@Valid @RequestBody CategoryDTO category, BindingResult result) {
-        if(result.hasErrors()) {
-            List<String> errorMessages = result.getFieldErrors()
-                    .stream()
-                    .map(FieldError::getDefaultMessage)
-                    .toList();
-            return ResponseEntity.badRequest().body(errorMessages);
-        }
-        return ResponseEntity.ok("This is insertCategory " + category);
+    public ResponseData<Integer> createCategory(@Valid @RequestBody CategoryDTO category) {
+        return new ResponseData<>(HttpStatus.CREATED.value(), "category create successfully", 1);
+    }
 
-    }
     @PutMapping("/{cateId}")
-    public ResponseEntity<String> updateCategory(@Valid @PathVariable("cateId") Long id) {
-        return ResponseEntity.ok("updateCategory with id = " + id);
+    public ResponseData<?> updateCategory(@Valid @PathVariable("cateId") Long id) {
+        return new ResponseData<>(HttpStatus.ACCEPTED.value(), "category update successfully with id = " + id);
     }
+
     @DeleteMapping("/{cateId}")
-    public ResponseEntity<String> deleteCategory(@Valid @PathVariable("cateId") Long id) {
-        return ResponseEntity.ok("deleteCategory with id = " + id);
+    public ResponseData<?> deleteCategory(@Valid @PathVariable("cateId") Long id) {
+        return new ResponseData<>(HttpStatus.NO_CONTENT.value(), "category delete successfully with id = " + id);
+    }
+
+    @GetMapping("/{cateId}")
+    public ResponseData<CategoryDTO> getCategory(@Valid @PathVariable("cateId") Long id) {
+        return new ResponseData<>(HttpStatus.ACCEPTED.value(), "get category successfully with id = " + id, null);
+    }
+
+    @GetMapping("/list")
+    public ResponseData<List<CategoryDTO>> getAllCategories(@RequestParam(defaultValue = "0", required = false) int page,
+                                            @RequestParam(defaultValue = "0", required = false) int limit) {
+        return new ResponseData<>(HttpStatus.ACCEPTED.value(), "get list of categories successfully", null);
     }
 }

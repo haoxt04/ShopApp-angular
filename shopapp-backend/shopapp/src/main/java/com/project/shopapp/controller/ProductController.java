@@ -1,5 +1,6 @@
 package com.project.shopapp.controller;
 import com.project.shopapp.dto.request.ProductDTO;
+import com.project.shopapp.dto.response.ResponseData;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -76,18 +77,18 @@ public class ProductController {
     }
 
     @GetMapping("")
-    public ResponseEntity<String> getProducts(@RequestParam(defaultValue = "0", required = false) int page,
-                                              @RequestParam(defaultValue = "0", required = false) int limit) {
-        return ResponseEntity.ok("getProducts here");
+    public ResponseData<List<ProductDTO>> getProducts(@RequestParam(defaultValue = "0", required = false) int page,
+                                    @RequestParam(defaultValue = "0", required = false) int limit) {
+        return new ResponseData<>(HttpStatus.ACCEPTED.value(), "get list of products successfully", null);
     }
 
     @GetMapping("/{proId}")
-    public ResponseEntity<String> getProductById(@Valid @PathVariable("proId") Long productId) {
-        return ResponseEntity.ok("Product with ID: " + productId);
+    public ResponseData<?> getProductById(@Valid @PathVariable("proId") Long id) {
+        return new ResponseData<>(HttpStatus.ACCEPTED.value(), "get product successfully with id = " + id, null);
     }
 
     @DeleteMapping("/{proId}")
-    public ResponseEntity<String> deleteProduct(@Valid @PathVariable("proId") Long id) {
-        return ResponseEntity.ok(String.format("Product with id = %d deleted successfully", id));
+    public ResponseData<?> deleteProduct(@Valid @PathVariable("proId") Long id) {
+        return new ResponseData<>(HttpStatus.NO_CONTENT.value(), "get product successfully with id = " + id);
     }
 }
