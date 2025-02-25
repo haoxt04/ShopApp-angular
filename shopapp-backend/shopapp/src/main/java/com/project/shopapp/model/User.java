@@ -7,9 +7,9 @@ import lombok.Data;
 
 import java.util.Date;
 
+@Entity
 @Table(name = "users")
 @Data
-@Builder
 public class User extends BaseEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

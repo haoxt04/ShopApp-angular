@@ -3,9 +3,10 @@ package com.project.shopapp.model;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
+@Entity
 @Data
-@Builder
 @Table(name = "product_images")
 public class ProductImage {
     @Id
