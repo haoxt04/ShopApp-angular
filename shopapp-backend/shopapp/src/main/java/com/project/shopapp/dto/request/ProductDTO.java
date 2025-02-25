@@ -23,7 +23,6 @@ public class ProductDTO {
     @JsonProperty("category_id")
     private String categoryId;
 
-    @NotEmpty(message = "files of product must be not empty")
     private List<MultipartFile> files;
 
 }
