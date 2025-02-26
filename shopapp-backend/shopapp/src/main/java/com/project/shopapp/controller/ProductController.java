@@ -1,4 +1,5 @@
 package com.project.shopapp.controller;
+import com.github.javafaker.Faker;
 import com.project.shopapp.dto.request.ProductDTO;
 import com.project.shopapp.dto.request.ProductImageDTO;
 import com.project.shopapp.dto.response.ProductDetailResponse;
@@ -145,5 +146,29 @@ public class ProductController {
             log.error("errorMessage = {}", e.getMessage(), e.getCause());
             return new ResponseError(HttpStatus.BAD_REQUEST.value(), "delete product fail");
         }
+    }
+
+    @PostMapping("/generateFakeProducts")
+    public ResponseData<?> generateFakeProducts() {
+        Faker faker = new Faker();
+        for(int i = 0; i < 70; i++) {
+            String productName = faker.commerce().productName();
+            if(productService.existsByName(productName)) {
+                continue;
+            }
+            ProductDTO newProduct = ProductDTO.builder()
+                    .name(productName)
+                    .price((float) faker.number().numberBetween(20, 1000))
+                    .description(faker.lorem().sentence())
+                    .thumbnail(faker.lorem().sentence())
+                    .categoryId((long) faker.number().numberBetween(1, 4))
+                    .build();
+            try {
+                productService.createProduct(newProduct);
+            }catch (Exception e) {
+                return new ResponseError(HttpStatus.BAD_REQUEST.value(), "generate data products fail");
+            }
+        }
+        return new ResponseData<>(HttpStatus.ACCEPTED.value(), "generate data products successfully");
     }
 }
