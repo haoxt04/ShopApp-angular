@@ -1,6 +1,10 @@
 package com.project.shopapp.controller;
 import com.project.shopapp.dto.request.ProductDTO;
 import com.project.shopapp.dto.response.ResponseData;
+import com.project.shopapp.dto.response.ResponseError;
+import com.project.shopapp.service.impl.ProductService;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -20,18 +24,15 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
+@RequiredArgsConstructor
+@Slf4j
 @RequestMapping("${api.prefix}/products")
 public class ProductController {
+    private final ProductService productService;
+
     @PostMapping(value = "", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<?> createProduct(@Valid @ModelAttribute ProductDTO product, BindingResult result) {
+    public ResponseData<?> createProduct(@Valid @ModelAttribute ProductDTO product) {
         try {
-            if (result.hasErrors()) {
-                List<String> errorMessages = result.getFieldErrors()
-                        .stream()
-                        .map(FieldError::getDefaultMessage)
-                        .toList();
-                return ResponseEntity.badRequest().body(errorMessages);
-            }
             List<MultipartFile> files = product.getFiles();
             files = files == null ? new ArrayList<MultipartFile>() : files;
             for (MultipartFile file : files) {
@@ -39,23 +40,22 @@ public class ProductController {
                     continue;
                 }
                 // Kiểm tra kích thước file và định dạng
-                if (file.getSize() > 10 * 1024 * 1024) { // Kích thước > 10MB
-                    return ResponseEntity.status(HttpStatus.PAYLOAD_TOO_LARGE)
-                            .body("File is too large! Maximum size is 10MB");
+                if (file.getSize() > 30 * 1024 * 1024) { // Kích thước > 10MB
+                    return new ResponseData<>(HttpStatus.PAYLOAD_TOO_LARGE.value(), "File is too large, max 30MB");
                 }
                 String contentType = file.getContentType();
                 if (contentType == null || !contentType.startsWith("image/")) {
-                    return ResponseEntity.status(HttpStatus.UNSUPPORTED_MEDIA_TYPE)
-                            .body("File must be an image");
+                    return new ResponseData<>(HttpStatus.UNSUPPORTED_MEDIA_TYPE.value(), "File must be an image");
                 }
                 // Lưu file và cập nhật thumbnail trong DTO
                 String filename = storeFile(file); // Thay thế hàm này với code của bạn để lưu file
                 //lưu vào đối tượng product trong DB => sẽ làm sau
                 //lưu vào bảng product_images
             }
-            return ResponseEntity.ok("Product created successfully");
+            return new ResponseData<>(HttpStatus.CREATED.value(), "product create successfully");
         } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
+            log.error("errorMessage = {}", e.getMessage(), e.getCause());
+            return new ResponseError(HttpStatus.BAD_REQUEST.value(), "create product fail");
         }
     }
 
@@ -77,18 +77,33 @@ public class ProductController {
     }
 
     @GetMapping("")
-    public ResponseData<List<ProductDTO>> getProducts(@RequestParam(defaultValue = "0", required = false) int page,
-                                    @RequestParam(defaultValue = "0", required = false) int limit) {
-        return new ResponseData<>(HttpStatus.ACCEPTED.value(), "get list of products successfully", null);
+    public ResponseData<?> getProducts(@RequestParam(defaultValue = "0", required = false) int page,
+                                    @RequestParam(defaultValue = "1", required = false) int limit) {
+        try {
+            return new ResponseData<>(HttpStatus.ACCEPTED.value(), "get list of products successfully", productService.getAllProducts(page, limit));
+        }catch (Exception e) {
+            log.error("errorMessage = {}", e.getMessage(), e.getCause());
+            return new ResponseError(HttpStatus.BAD_REQUEST.value(), "get list products fail");
+        }
     }
 
     @GetMapping("/{proId}")
     public ResponseData<?> getProductById(@Valid @PathVariable("proId") Long id) {
-        return new ResponseData<>(HttpStatus.ACCEPTED.value(), "get product successfully with id = " + id, null);
+        try {
+            return new ResponseData<>(HttpStatus.ACCEPTED.value(), "get product successfully with id = " + id, productService.getProductById(id));
+        }catch (Exception e) {
+            log.error("errorMessage = {}", e.getMessage(), e.getCause());
+            return new ResponseError(HttpStatus.BAD_REQUEST.value(), "get product fail");
+        }
     }
 
     @DeleteMapping("/{proId}")
     public ResponseData<?> deleteProduct(@Valid @PathVariable("proId") Long id) {
-        return new ResponseData<>(HttpStatus.NO_CONTENT.value(), "get product successfully with id = " + id);
+        try {
+            return new ResponseData<>(HttpStatus.NO_CONTENT.value(), "delete product successfully with id = " + id);
+        }catch (Exception e) {
+            log.error("errorMessage = {}", e.getMessage(), e.getCause());
+            return new ResponseError(HttpStatus.BAD_REQUEST.value(), "delete product fail");
+        }
     }
 }
