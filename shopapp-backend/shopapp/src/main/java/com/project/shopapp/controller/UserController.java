@@ -1,36 +1,34 @@
 package com.project.shopapp.controller;
 import com.project.shopapp.dto.request.UserDTO;
 import com.project.shopapp.dto.request.UserLoginDTO;
+import com.project.shopapp.dto.response.ResponseData;
+import com.project.shopapp.dto.response.ResponseError;
+import com.project.shopapp.service.impl.UserService;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
-
 @RestController
+@RequiredArgsConstructor
+@Slf4j
 @RequestMapping("${api.prefix}/users")
 public class UserController {
+    private final UserService userService;
+
     @PostMapping("/register")
-    public ResponseEntity<?> createUser(@Valid @RequestBody UserDTO user, BindingResult result) {
+    public ResponseData<?> createUser(@Valid @RequestBody UserDTO user) {
+        log.info("Request add user = {}", user.getFullName());
         try{
-            if(result.hasErrors()) {
-                List<String> errorMessages = result.getFieldErrors()
-                        .stream()
-                        .map(FieldError::getDefaultMessage)
-                        .toList();
-                return ResponseEntity.badRequest().body(errorMessages);
-            }
-            if(!user.getPassword().equals(user.getRetypePassword())){
-                return ResponseEntity.badRequest().body("Password does not match");
-            }
-            return ResponseEntity.ok("Register successfully");
+            return new ResponseData<>(HttpStatus.CREATED.value(), "user add successfully", userService.createUser(user));
         }  catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
+            log.error("errorMessage={}", e.getMessage(), e.getCause());
+            return new ResponseError(HttpStatus.BAD_REQUEST.value(), e.getMessage());
         }
     }
     @PostMapping("/login")
