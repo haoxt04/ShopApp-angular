@@ -1,14 +1,17 @@
 package com.project.shopapp.model;
 
 import jakarta.persistence.*;
-import lombok.Builder;
-import lombok.Data;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
-@Entity
 @Table(name = "tokens")
-@Data
+@Entity
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 public class Tokens {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

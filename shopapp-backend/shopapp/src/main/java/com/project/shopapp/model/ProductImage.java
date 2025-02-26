@@ -1,13 +1,15 @@
 package com.project.shopapp.model;
 
 import jakarta.persistence.*;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
-@Entity
-@Data
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 @Table(name = "product_images")
+@Entity
 public class ProductImage {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

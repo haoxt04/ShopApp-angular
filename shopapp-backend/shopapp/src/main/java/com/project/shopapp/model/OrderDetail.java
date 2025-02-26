@@ -2,11 +2,15 @@ package com.project.shopapp.model;
 
 
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.*;
 
-@Entity
 @Table(name = "order_details")
-@Data
+@Entity
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 public class OrderDetail {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,7 +24,7 @@ public class OrderDetail {
     @JoinColumn(name = "product_id")
     private Product product;
 
-    private float price;
+    private Float price;
 
     @Column(name = "number_of_products", nullable = false)
     private int numberOfProducts;

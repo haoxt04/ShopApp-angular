@@ -2,14 +2,17 @@ package com.project.shopapp.model;
 
 
 import jakarta.persistence.*;
-import lombok.Builder;
-import lombok.Data;
+import lombok.*;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
-@Entity
 @Table(name = "users")
-@Data
+@Entity
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 public class User extends BaseEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,7 +33,7 @@ public class User extends BaseEntity{
     private boolean active;
 
     @Column(name = "date_of_birth")
-    private Date dateOfBirth;
+    private LocalDateTime dateOfBirth;
 
     @Column(name = "facebook_account_id")
     private int facebookAccountId;

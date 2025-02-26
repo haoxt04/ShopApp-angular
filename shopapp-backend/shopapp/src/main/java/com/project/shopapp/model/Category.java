@@ -1,11 +1,15 @@
 package com.project.shopapp.model;
 
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.*;
 
-@Entity
-@Data
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 @Table(name = "categories")
+@Entity
 public class Category extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

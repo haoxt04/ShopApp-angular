@@ -1,13 +1,15 @@
 package com.project.shopapp.model;
 
 import jakarta.persistence.*;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
-@Entity
 @Table(name = "social_account")
-@Data
+@Entity
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 public class SocialAccount {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

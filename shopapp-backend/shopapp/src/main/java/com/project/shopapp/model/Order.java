@@ -1,14 +1,17 @@
 package com.project.shopapp.model;
 
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.*;
 
 import java.time.LocalDateTime;
-import java.util.Date;
 
-@Entity
 @Table(name = "orders")
-@Data
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
+@Entity
 public class Order extends BaseEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -49,7 +52,7 @@ public class Order extends BaseEntity{
     private String shippingAddress;
 
     @Column(name = "shipping_date")
-    private Date shippingDate;
+    private LocalDateTime shippingDate;
 
     @Column(name = "tracking_number")
     private String trackingNumber;
