@@ -1,6 +1,7 @@
 package com.project.shopapp.controller;
 import com.project.shopapp.dto.request.ProductDTO;
 import com.project.shopapp.dto.request.ProductImageDTO;
+import com.project.shopapp.dto.response.ProductDetailResponse;
 import com.project.shopapp.dto.response.ResponseData;
 import com.project.shopapp.dto.response.ResponseError;
 import com.project.shopapp.model.Product;
@@ -44,7 +45,7 @@ public class ProductController {
     public ResponseData<?> uploadImages(@PathVariable("id") Long productId,
                                           @RequestParam("files") List<MultipartFile> files) {
         try {
-            Product existingProduct = productService.getProductById(productId);
+            ProductDetailResponse existingProduct = productService.getProduct(productId);
             files = files == null ? new ArrayList<MultipartFile>() : files;
             if(files.size() > ProductImage.MAXIMUM_IMAGES_PER_PRODUCT) {
                 return new ResponseData<>(HttpStatus.BAD_REQUEST.value(), "use can only update max 5 images");
@@ -116,8 +117,8 @@ public class ProductController {
     }
 
     @GetMapping("")
-    public ResponseData<?> getProducts(@RequestParam(defaultValue = "0", required = false) int page,
-                                    @RequestParam(defaultValue = "1", required = false) int limit) {
+    public ResponseData<List<ProductDetailResponse>> getProducts(@RequestParam(defaultValue = "0", required = false) int page,
+                                                           @RequestParam(defaultValue = "1", required = false) int limit) {
         try {
             return new ResponseData<>(HttpStatus.ACCEPTED.value(), "get list of products successfully", productService.getAllProducts(page, limit));
         }catch (Exception e) {
@@ -127,9 +128,9 @@ public class ProductController {
     }
 
     @GetMapping("/{proId}")
-    public ResponseData<?> getProductById(@Valid @PathVariable("proId") Long id) {
+    public ResponseData<ProductDetailResponse> getProductById(@Valid @PathVariable("proId") Long id) {
         try {
-            return new ResponseData<>(HttpStatus.ACCEPTED.value(), "get product successfully with id = " + id, productService.getProductById(id));
+            return new ResponseData<>(HttpStatus.ACCEPTED.value(), "get product successfully with id = " + id, productService.getProduct(id));
         }catch (Exception e) {
             log.error("errorMessage = {}", e.getMessage(), e.getCause());
             return new ResponseError(HttpStatus.BAD_REQUEST.value(), "get product fail");

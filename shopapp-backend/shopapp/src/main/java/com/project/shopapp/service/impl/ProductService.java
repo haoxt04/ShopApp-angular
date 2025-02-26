@@ -1,7 +1,7 @@
 package com.project.shopapp.service.impl;
-
 import com.project.shopapp.dto.request.ProductDTO;
 import com.project.shopapp.dto.request.ProductImageDTO;
+import com.project.shopapp.dto.response.ProductDetailResponse;
 import com.project.shopapp.exception.InvalidParamException;
 import com.project.shopapp.exception.ResourceNotFoundException;
 import com.project.shopapp.model.Category;
@@ -45,20 +45,32 @@ public class ProductService implements IProductService {
     }
 
     @Override
-    public Product getProductById(Long id) {
-        return productRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("product not found"));
+    public ProductDetailResponse getProduct(Long id) {
+        Product product = getProductById(id);
+        return ProductDetailResponse.builder()
+                .id(product.getId())
+                .name(product.getName())
+                .price(product.getPrice())
+                .description(product.getDescription())
+                .thumbnail(product.getThumbnail())
+                .categoryId(product.getCategory().getId())
+                .build();
     }
 
+
     @Override
-    public List<Product> getAllProducts(int page, int limit) {
+    public List<ProductDetailResponse> getAllProducts(int page, int limit) {
         Pageable pageable = PageRequest.of(page, limit);
+
         Page<Product> products = productRepository.findAll(pageable);
-        return products.stream().map(product -> Product.builder()
+
+        return products.stream().map(product -> ProductDetailResponse.builder()
+                .id(product.getId())
                 .name(product.getName())
                 .price(product.getPrice())
                 .thumbnail(product.getThumbnail())
                 .description(product.getDescription())
-                .category(product.getCategory())
+                .categoryId(product.getCategory().getId())
                 .build()).toList();
     }
 
@@ -98,5 +110,9 @@ public class ProductService implements IProductService {
             throw new InvalidParamException("Number of image must be less than " + ProductImage.MAXIMUM_IMAGES_PER_PRODUCT);
         }
         return productImageRepository.save(newProductImage);
+    }
+
+    private Product getProductById(Long userId) {
+        return productRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("product not found"));
     }
 }
