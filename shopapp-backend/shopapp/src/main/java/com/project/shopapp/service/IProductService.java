@@ -1,12 +1,14 @@
 package com.project.shopapp.service;
 
 import com.project.shopapp.dto.request.ProductDTO;
+import com.project.shopapp.dto.request.ProductImageDTO;
 import com.project.shopapp.model.Product;
+import com.project.shopapp.model.ProductImage;
 
 import java.util.List;
 
 public interface IProductService {
-    Long createProduct(ProductDTO productDTO);
+    Product createProduct(ProductDTO productDTO);
 
     Product getProductById(Long id);
 
@@ -17,4 +19,6 @@ public interface IProductService {
     void deleteProduct(Long id);
 
     boolean existsByName(String name);
+
+    ProductImage createProductImage(Long productId, ProductImageDTO productImageDTO);
 }

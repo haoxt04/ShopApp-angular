@@ -1,10 +1,14 @@
 package com.project.shopapp.service.impl;
 
 import com.project.shopapp.dto.request.ProductDTO;
+import com.project.shopapp.dto.request.ProductImageDTO;
+import com.project.shopapp.exception.InvalidParamException;
 import com.project.shopapp.exception.ResourceNotFoundException;
 import com.project.shopapp.model.Category;
 import com.project.shopapp.model.Product;
+import com.project.shopapp.model.ProductImage;
 import com.project.shopapp.repository.CategoryRepository;
+import com.project.shopapp.repository.ProductImageRepository;
 import com.project.shopapp.repository.ProductRepository;
 import com.project.shopapp.service.IProductService;
 import lombok.RequiredArgsConstructor;
@@ -22,9 +26,10 @@ import java.util.List;
 public class ProductService implements IProductService {
     private final ProductRepository productRepository;
     private final CategoryRepository categoryRepository;
+    private final ProductImageRepository productImageRepository;
 
     @Override
-    public Long createProduct(ProductDTO productDTO) {
+    public Product createProduct(ProductDTO productDTO) {
         Category existsCate = categoryRepository.findById(productDTO.getCategoryId()).orElseThrow(()
                 -> new ResourceNotFoundException("cate id of product not found"));
         Product product = Product.builder()
@@ -36,7 +41,7 @@ public class ProductService implements IProductService {
                 .build();
         productRepository.save(product);
         log.info("product has saved");
-        return product.getId();
+        return product;
     }
 
     @Override
@@ -77,5 +82,21 @@ public class ProductService implements IProductService {
     @Override
     public boolean existsByName(String name) {
         return productRepository.existsByName(name);
+    }
+
+    @Override
+    public ProductImage createProductImage(Long productId, ProductImageDTO productImageDTO) {
+        Product existsProduct = getProductById(productId);
+
+        ProductImage newProductImage = ProductImage.builder()
+                .product(existsProduct)
+                .imageUrl(productImageDTO.getImageUrl())
+                .build();
+        // không cho insert quá 5 ảnh
+        int size = productImageRepository.findByProductId(productId).size();
+        if(size >= ProductImage.MAXIMUM_IMAGES_PER_PRODUCT) {
+            throw new InvalidParamException("Number of image must be less than " + ProductImage.MAXIMUM_IMAGES_PER_PRODUCT);
+        }
+        return productImageRepository.save(newProductImage);
     }
 }

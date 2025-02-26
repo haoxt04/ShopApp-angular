@@ -3,9 +3,6 @@ package com.project.shopapp.dto.request;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 import jakarta.validation.constraints.*;
-import org.springframework.web.multipart.MultipartFile;
-
-import java.util.List;
 
 @Data
 @Builder
@@ -22,7 +19,5 @@ public class ProductDTO {
 
     @JsonProperty("category_id")
     private Long categoryId;
-
-    private List<MultipartFile> files;
 
 }
