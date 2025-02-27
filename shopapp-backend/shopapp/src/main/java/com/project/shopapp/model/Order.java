@@ -3,7 +3,9 @@ package com.project.shopapp.model;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Date;
 
 @Table(name = "orders")
 @Getter
@@ -37,7 +39,7 @@ public class Order extends BaseEntity{
     private String note;
 
     @Column(name = "order_date")
-    private LocalDateTime orderDate;
+    private Date orderDate;
 
     @Column(name = "status")
     private String status;
@@ -52,7 +54,7 @@ public class Order extends BaseEntity{
     private String shippingAddress;
 
     @Column(name = "shipping_date")
-    private LocalDateTime shippingDate;
+    private LocalDate shippingDate;
 
     @Column(name = "tracking_number")
     private String trackingNumber;

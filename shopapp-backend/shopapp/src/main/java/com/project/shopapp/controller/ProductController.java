@@ -3,6 +3,7 @@ import com.github.javafaker.Faker;
 import com.project.shopapp.dto.request.ProductDTO;
 import com.project.shopapp.dto.request.ProductImageDTO;
 import com.project.shopapp.dto.response.ProductDetailResponse;
+import com.project.shopapp.dto.response.ProductListResponse;
 import com.project.shopapp.dto.response.ResponseData;
 import com.project.shopapp.dto.response.ResponseError;
 import com.project.shopapp.model.Product;
@@ -118,8 +119,8 @@ public class ProductController {
     }
 
     @GetMapping("")
-    public ResponseData<List<ProductDetailResponse>> getProducts(@RequestParam(defaultValue = "0", required = false) int page,
-                                                           @RequestParam(defaultValue = "1", required = false) int limit) {
+    public ResponseData<ProductListResponse> getProducts(@RequestParam(defaultValue = "0", required = false) int page,
+                                                         @RequestParam(defaultValue = "1", required = false) int limit) {
         try {
             return new ResponseData<>(HttpStatus.ACCEPTED.value(), "get list of products successfully", productService.getAllProducts(page, limit));
         }catch (Exception e) {

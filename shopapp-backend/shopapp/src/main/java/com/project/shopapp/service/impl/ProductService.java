@@ -2,6 +2,7 @@ package com.project.shopapp.service.impl;
 import com.project.shopapp.dto.request.ProductDTO;
 import com.project.shopapp.dto.request.ProductImageDTO;
 import com.project.shopapp.dto.response.ProductDetailResponse;
+import com.project.shopapp.dto.response.ProductListResponse;
 import com.project.shopapp.exception.InvalidParamException;
 import com.project.shopapp.exception.ResourceNotFoundException;
 import com.project.shopapp.model.Category;
@@ -59,12 +60,12 @@ public class ProductService implements IProductService {
 
 
     @Override
-    public List<ProductDetailResponse> getAllProducts(int page, int limit) {
+    public ProductListResponse getAllProducts(int page, int limit) {
         Pageable pageable = PageRequest.of(page, limit);
 
-        Page<Product> products = productRepository.findAll(pageable);
+        Page<Product> productsPage = productRepository.findAll(pageable);
 
-        return products.stream().map(product -> ProductDetailResponse.builder()
+        List<ProductDetailResponse> productList = productsPage.stream().map(product -> ProductDetailResponse.builder()
                 .id(product.getId())
                 .name(product.getName())
                 .price(product.getPrice())
@@ -72,6 +73,10 @@ public class ProductService implements IProductService {
                 .description(product.getDescription())
                 .categoryId(product.getCategory().getId())
                 .build()).toList();
+        return ProductListResponse.builder()
+                .products(productList)
+                .totalPages(productsPage.getTotalPages())
+                .build();
     }
 
     @Override

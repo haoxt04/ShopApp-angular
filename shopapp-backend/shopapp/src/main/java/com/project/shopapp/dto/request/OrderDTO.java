@@ -7,6 +7,8 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 import lombok.Data;
 
+import java.time.LocalDate;
+
 @Data
 @Builder
 public class OrderDTO {
@@ -40,6 +42,9 @@ public class OrderDTO {
     @JsonProperty("shipping_address")
     @NotNull(message = "shipping address must be not null")
     private String shippingAddress;
+
+    @JsonProperty("shipping_date")
+    private LocalDate shippingDate;
 
     @JsonProperty("payment_method")
     @NotNull(message = "payment method must be not null")
