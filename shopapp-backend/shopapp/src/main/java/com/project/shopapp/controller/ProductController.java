@@ -36,6 +36,7 @@ public class ProductController {
     @PostMapping("")
     public ResponseData<?> createProduct(@Valid @RequestBody ProductDTO productDTO) {
         try {
+            log.info("Request create product = {}", productDTO.getName());
             Product newProduct = productService.createProduct(productDTO);
             return new ResponseData<>(HttpStatus.OK.value(), "create new product successfully", newProduct);
         } catch (Exception e) {
@@ -110,6 +111,7 @@ public class ProductController {
     @PutMapping("/{proId}")
     public ResponseData<?> updateProducts(@Valid @PathVariable("proId") Long id, @Valid @RequestBody ProductDTO productDTO) {
         try {
+            log.info("Request update product = {}", productDTO.getName());
             productService.updateProduct(id, productDTO);
             return new ResponseData<>(HttpStatus.ACCEPTED.value(), "update product successfully with id = " + id, productDTO);
         } catch (Exception e) {
