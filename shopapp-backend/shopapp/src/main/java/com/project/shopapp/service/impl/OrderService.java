@@ -78,8 +78,11 @@ public class OrderService implements IOrderService {
 
     @Override
     public void deleteOrder(Long id) {
+        // xóa mềm: active = false
         log.info("order deleted, orderId =  {}", id);
-        orderRepository.deleteById(id);
+        Order order = getOrder(id);
+        order.setActive(false);
+        orderRepository.save(order);
     }
 
     @Override

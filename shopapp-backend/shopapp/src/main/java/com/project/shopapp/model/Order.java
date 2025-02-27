@@ -62,6 +62,5 @@ public class Order extends BaseEntity{
     @Column(name = "payment_method")
     private String paymentMethod;
 
-    @Column(name = "active")
     private boolean active;     // thuộc về admin
 }

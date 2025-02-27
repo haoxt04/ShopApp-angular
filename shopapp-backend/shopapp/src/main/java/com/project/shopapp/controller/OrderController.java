@@ -45,16 +45,30 @@ public class OrderController {
         }
     }
     @GetMapping("/{orderId}")
-    public ResponseData<OrderResponse> getOrderById(@Valid @PathVariable("orderId") Long id) {
+    public ResponseData<?> getOrderById(@Valid @PathVariable("orderId") Long id) {
         try {
             log.info("Get product by id = {}", id);
             Order order = orderService.getOrder(id);
-            return new ResponseData<>(HttpStatus.ACCEPTED.value(), "get product by id successfully", orderService.convertToOrderResponse(order));
+            return new ResponseData<>(HttpStatus.ACCEPTED.value(), "get product by id successfully", order);
         }catch (Exception e) {
             log.error("errorMessage = {}", e.getMessage(), e.getCause());
             return new ResponseError(HttpStatus.BAD_REQUEST.value(), "get order by id fail");
         }
     }
+
+
+    @GetMapping("/user/{userId}")
+    public ResponseData<?> getOrderByUserId(@Valid @PathVariable("userId") Long id) {
+        try {
+            log.info("Get order by user id = {}", id);
+            List<Order> orders = orderService.findByUserId(id);
+            return new ResponseData<>(HttpStatus.ACCEPTED.value(), "get order by user id successfully", orders);
+        }catch (Exception e) {
+            log.error("errorMessage = {}", e.getMessage(), e.getCause());
+            return new ResponseError(HttpStatus.BAD_REQUEST.value(), "get order by user id fail");
+        }
+    }
+
     @GetMapping("")
     public ResponseData<List<OrderDTO>> getListOfOrder(@RequestParam(defaultValue = "0", required = false) int page,
                                             @RequestParam(defaultValue = "0", required = false) int limit) {
@@ -63,6 +77,13 @@ public class OrderController {
     @DeleteMapping("/{orderId}")
     public ResponseData<?> deleteOrder(@Valid @PathVariable("orderId") Long id) {
         // xóa mềm => cập nhật trường active = false
-        return new ResponseData<>(HttpStatus.NO_CONTENT.value(), "delete order successfully with id = " + id);
+        try {
+            log.info("Delete order by id = {}", id);
+            orderService.deleteOrder(id);
+            return new ResponseData<>(HttpStatus.NO_CONTENT.value(), "delete order successfully with id = " + id);
+        }catch (Exception e) {
+            log.error("errorMessage = {}", e.getMessage(), e.getCause());
+            return new ResponseError(HttpStatus.BAD_REQUEST.value(), "delete order by user id fail");
+        }
     }
 }
