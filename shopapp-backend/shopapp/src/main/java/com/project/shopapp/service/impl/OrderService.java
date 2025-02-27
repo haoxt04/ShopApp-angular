@@ -1,6 +1,7 @@
 package com.project.shopapp.service.impl;
 
 import com.project.shopapp.dto.request.OrderDTO;
+import com.project.shopapp.dto.response.OrderResponse;
 import com.project.shopapp.exception.ResourceNotFoundException;
 import com.project.shopapp.model.Order;
 import com.project.shopapp.model.OrderStatus;
@@ -95,6 +96,24 @@ public class OrderService implements IOrderService {
         return Optional.ofNullable(shippingDate)
                 .filter(date -> !date.isBefore(LocalDate.now()))
                 .orElse(LocalDate.now());
+    }
+
+    public OrderResponse convertToOrderResponse(Order order) {
+        return OrderResponse.builder()
+                .id(order.getId())
+                .fullName(order.getFullName())
+                .email(order.getEmail())
+                .phoneNumber(order.getPhoneNumber())
+                .address(order.getAddress())
+                .note(order.getNote())
+                .orderDate(order.getOrderDate())
+                .status(order.getStatus())
+                .totalMoney(Float.parseFloat(order.getTotalMoney()))
+                .shippingMethod(order.getShippingMethod())
+                .shippingAddress(order.getShippingAddress())
+                .shippingDate(order.getShippingDate())
+                .paymentMethod(order.getPaymentMethod())
+                .build();
     }
 
 }

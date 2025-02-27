@@ -1,7 +1,7 @@
 package com.project.shopapp.service.impl;
-import com.project.shopapp.dto.request.OrderDTO;
-import com.project.shopapp.model.Order;
-import com.project.shopapp.service.IOrderService;
+import com.project.shopapp.dto.request.OrderDetailDTO;
+import com.project.shopapp.model.OrderDetail;
+import com.project.shopapp.service.IOrderDetailService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -11,29 +11,30 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 @Slf4j
-public class OrderDetailService implements IOrderService {
+public class OrderDetailService implements IOrderDetailService {
+
     @Override
-    public Order createOrder(OrderDTO orderDTO) {
+    public OrderDetail createOrderDetail(OrderDetailDTO newOrderDetail) {
         return null;
     }
 
     @Override
-    public Order getOrder(Long id) {
+    public OrderDetail getOrderDetail(Long id) {
         return null;
     }
 
     @Override
-    public Order updateOrder(Long id, OrderDTO orderDTO) {
+    public OrderDetail updateOrderDetail(Long id, OrderDetailDTO newOrderDetail) {
         return null;
     }
 
     @Override
-    public void deleteOrder(Long id) {
+    public void deleteById(Long id) {
 
     }
 
     @Override
-    public List<Order> findByUserId(Long userId) {
+    public List<OrderDetail> findByOrderId(Long orderId) {
         return List.of();
     }
 }

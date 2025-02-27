@@ -1,6 +1,4 @@
 package com.project.shopapp.model;
-
-
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -30,6 +28,7 @@ public class User extends BaseEntity{
     @Column(name = "password", length = 200)
     private String password;
 
+    @Column(name = "is_active")
     private boolean active;
 
     @Column(name = "date_of_birth")
