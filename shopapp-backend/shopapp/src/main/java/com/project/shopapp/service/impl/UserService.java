@@ -10,7 +10,10 @@ import com.project.shopapp.service.IUserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 @Slf4j
@@ -18,8 +21,10 @@ import org.springframework.stereotype.Service;
 public class UserService implements IUserService {
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
+    private final PasswordEncoder passwordEncoder;
     @Override
     public User createUser(UserDTO userDTO) {
+        // register user
         String phoneNumber = userDTO.getPhoneNumber();
         // kiểm tra số điện thoại đã tồn tại chưa
         if(userRepository.existsByPhoneNumber(phoneNumber)) {
@@ -41,15 +46,18 @@ public class UserService implements IUserService {
         // Kiểm tra nếu có accountId, không yêu cầu password
         if (userDTO.getFacebookAccountId() == 0 && userDTO.getGoogleAccountId() == 0) {
             String password = userDTO.getPassword();
-            //String encodedPassword = passwordEncoder.encode(password);
-            //sẽ nói đến trong phần spring security
-            //new.setPassword(encodedPassword);
+            String encodedPassword = passwordEncoder.encode(password);
+            user.setPassword(encodedPassword);
         }
         return userRepository.save(user);
     }
 
     @Override
-    public String login(String phoneNumber, String password) {
-        return "";
+    public User login(String phoneNumber, String password) throws Exception {
+        Optional<User> optionalUser = userRepository.findByPhoneNumber(phoneNumber);
+        if(optionalUser.isEmpty()) {
+            throw new ResourceNotFoundException("Invalid phone number or password");
+        }
+        return optionalUser.get();      // muốn trả về JWT token
     }
 }

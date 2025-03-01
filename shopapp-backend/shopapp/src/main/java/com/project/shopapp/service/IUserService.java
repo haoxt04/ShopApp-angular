@@ -7,5 +7,5 @@ public interface IUserService {
 
     User createUser(UserDTO user);
 
-    String login(String phoneNumber, String password);
+    User login(String phoneNumber, String password) throws Exception;
 }
