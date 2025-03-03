@@ -1,5 +1,4 @@
 package com.project.shopapp.component;
-
 import com.project.shopapp.model.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -11,7 +10,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-
 import java.security.Key;
 import java.security.SecureRandom;
 import java.util.Date;
@@ -27,7 +25,7 @@ public class JwtTokenUtil {
     @Value("${jwt.expiration}")
     private Long expiration;     // save to environment variable
 
-    @Value("${jwt.expiration}")
+    @Value("${jwt.secretKey}")
     private String secretKey;
 
     public String generateToken(User user) {
@@ -79,5 +77,9 @@ public class JwtTokenUtil {
     public boolean isTokenExpired(String token) {
         Date expirationDate = this.extractClaim(token, Claims::getExpiration);
         return expirationDate.before(new Date());
+    }
+
+    public String extractPhoneNumber(String token) {
+        return extractClaim(token, Claims::getSubject);
     }
 }

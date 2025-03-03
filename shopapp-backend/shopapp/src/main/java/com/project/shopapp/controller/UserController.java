@@ -3,6 +3,7 @@ import com.project.shopapp.dto.request.UserDTO;
 import com.project.shopapp.dto.request.UserLoginDTO;
 import com.project.shopapp.dto.response.ResponseData;
 import com.project.shopapp.dto.response.ResponseError;
+import com.project.shopapp.model.User;
 import com.project.shopapp.service.impl.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -22,10 +23,11 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping("/register")
-    public ResponseData<?> createUser(@Valid @RequestBody UserDTO user) {
-        log.info("Request add user = {}", user.getFullName());
+    public ResponseData<?> createUser(@Valid @RequestBody UserDTO userDTO) {
+        log.info("Request add user = {}", userDTO.getFullName());
         try{
-            return new ResponseData<>(HttpStatus.CREATED.value(), "user add successfully", userService.createUser(user));
+            User user = userService.createUser(userDTO);
+            return new ResponseData<>(HttpStatus.CREATED.value(), "user add successfully", user);
         }  catch (Exception e) {
             log.error("errorMessage={}", e.getMessage(), e.getCause());
             return new ResponseError(HttpStatus.BAD_REQUEST.value(), e.getMessage());
@@ -36,7 +38,7 @@ public class UserController {
         // Kiểm tra thông tin đăng nhập và sinh token
         try {
             String token = userService.login(userLogin.getPhoneNumber(), userLogin.getPassword());
-            return ResponseEntity.ok("some token");
+            return ResponseEntity.ok(token);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
