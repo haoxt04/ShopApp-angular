@@ -2,6 +2,7 @@ package com.project.shopapp.service.impl;
 
 import com.project.shopapp.component.JwtTokenUtil;
 import com.project.shopapp.dto.request.UserDTO;
+import com.project.shopapp.exception.PermissionDenyException;
 import com.project.shopapp.exception.ResourceNotFoundException;
 import com.project.shopapp.model.Role;
 import com.project.shopapp.model.User;
@@ -36,6 +37,11 @@ public class UserService implements IUserService {
         if(userRepository.existsByPhoneNumber(phoneNumber)) {
             throw new DataIntegrityViolationException("phone number already exists");
         }
+        Role role = roleRepository.findById(userDTO.getRoleId()).orElseThrow(() ->
+                new ResourceNotFoundException("role id not found"));
+        if(role.getName().toUpperCase().equals(Role.ADMIN)) {
+            throw new PermissionDenyException("you can not register an admin role");
+        }
         //convert from userDTO => user
         User user = User.builder()
                 .fullName(userDTO.getFullName())
@@ -46,9 +52,8 @@ public class UserService implements IUserService {
                 .facebookAccountId(userDTO.getFacebookAccountId())
                 .googleAccountId(userDTO.getGoogleAccountId())
                 .build();
-        Role role = roleRepository.findById(userDTO.getRoleId()).orElseThrow(() ->
-                new ResourceNotFoundException("role id not found"));
         user.setRole(role);
+
         // Kiểm tra nếu có accountId, không yêu cầu password
         if (userDTO.getFacebookAccountId() == 0 && userDTO.getGoogleAccountId() == 0) {
             String password = userDTO.getPassword();
