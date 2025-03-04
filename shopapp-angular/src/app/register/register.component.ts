@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
+import { NgForm } from '@angular/forms';
 
 @Component({
   selector: 'app-register',
@@ -7,6 +8,7 @@ import { Component } from '@angular/core';
   styleUrl: './register.component.scss'
 })
 export class RegisterComponent {
+  @ViewChild('registerForm') registerForm!: NgForm;
   // khai báo các biến tương ứng với các trường dữ liệu trong form
   phone: string;
   password: string;
@@ -29,6 +31,7 @@ export class RegisterComponent {
 
   onPhoneChange() {
     console.log(`Phone typed: ${this.phone}`)
+
   }
 
   register() {
@@ -40,5 +43,32 @@ export class RegisterComponent {
                   + `isAccepted: ${this.isAccepted}`
                   + `dateOfBirth: ${this.dateOfBirth}`;
     alert(message);
+  }
+
+  // kiểm tra 2 mật khẩu match nhau
+  checkPasswordsMatch() {
+    if(this.password !== this.retypePassword) {
+      this.registerForm.form.controls['retypePassword'].setErrors({'passwordMismatch': true});
+    }else {
+      this.registerForm.form.controls['retypePassword'].setErrors(null);
+    }
+  }
+
+  checkAge() {
+    if(this.dateOfBirth) {
+      const today = new Date();
+      const birthDate = new Date(this.dateOfBirth);
+      let age = today.getFullYear() - birthDate.getFullYear();
+      const monthDiff = today.getMonth() - birthDate.getMonth();
+      if(monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+        age--;
+      }
+
+      if(age < 18) {
+        this.registerForm.form.controls['dateOfBirth'].setErrors({'invalidAge': true});
+      }else {
+        this.registerForm.form.controls['dateOfBirth'].setErrors(null);
+      }
+    }
   }
 }
