@@ -3,8 +3,8 @@ package com.project.shopapp.dto.response;
 import org.springframework.http.HttpStatus;
 
 public class ResponseData<T> {
-    private final int status;
-    private final String message;
+    private int status;
+    private String message;
     private T data;
 
     // GET, POST
