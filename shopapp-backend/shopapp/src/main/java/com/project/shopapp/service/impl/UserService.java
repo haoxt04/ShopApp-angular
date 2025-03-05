@@ -1,6 +1,6 @@
 package com.project.shopapp.service.impl;
 
-import com.project.shopapp.component.JwtTokenUtil;
+import com.project.shopapp.component.JwtTokenUtils;
 import com.project.shopapp.dto.request.UserDTO;
 import com.project.shopapp.exception.PermissionDenyException;
 import com.project.shopapp.exception.ResourceNotFoundException;
@@ -27,7 +27,7 @@ public class UserService implements IUserService {
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
-    private final JwtTokenUtil jwtTokenUtil;
+    private final JwtTokenUtils jwtTokenUtil;
     private final AuthenticationManager authenticationManager;
     @Override
     public User createUser(UserDTO userDTO) {

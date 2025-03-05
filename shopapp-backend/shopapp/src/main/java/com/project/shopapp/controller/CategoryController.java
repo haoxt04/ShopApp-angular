@@ -1,4 +1,5 @@
 package com.project.shopapp.controller;
+import com.project.shopapp.component.LocalizationUtils;
 import com.project.shopapp.dto.request.CategoryDTO;
 import com.project.shopapp.dto.response.LoginResponse;
 import com.project.shopapp.dto.response.ResponseData;
@@ -29,6 +30,7 @@ public class CategoryController {
     private final CategoryService categoryService;
     private final MessageSource messageSource;
     private final LocaleResolver localeResolver;
+    private final LocalizationUtils localizationUtils;
 
     @PostMapping("")
     public ResponseData<Long> createCategory(@Valid @RequestBody CategoryDTO category) {

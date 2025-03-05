@@ -1,6 +1,6 @@
 package com.project.shopapp.filter;
 
-import com.project.shopapp.component.JwtTokenUtil;
+import com.project.shopapp.component.JwtTokenUtils;
 import com.project.shopapp.model.User;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -15,7 +15,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
-import org.springframework.web.cors.CorsUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
@@ -28,7 +27,7 @@ public class JwtTokenFilter extends OncePerRequestFilter {
     @Value("${api.prefix}")
     private String apiPrefix;
     private final UserDetailsService userDetailsService;
-    private final JwtTokenUtil jwtTokenUtil;
+    private final JwtTokenUtils jwtTokenUtil;
 
     @Override
     protected void doFilterInternal(@NonNull HttpServletRequest request,

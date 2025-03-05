@@ -1,5 +1,6 @@
 package com.project.shopapp.controller;
 import com.github.javafaker.Faker;
+import com.project.shopapp.component.LocalizationUtils;
 import com.project.shopapp.dto.request.ProductDTO;
 import com.project.shopapp.dto.request.ProductImageDTO;
 import com.project.shopapp.dto.response.ProductDetailResponse;
@@ -9,10 +10,13 @@ import com.project.shopapp.dto.response.ResponseError;
 import com.project.shopapp.model.Product;
 import com.project.shopapp.model.ProductImage;
 import com.project.shopapp.service.impl.ProductService;
+import com.project.shopapp.utils.MessageKeys;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.io.UrlResource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import jakarta.validation.*;
@@ -32,6 +36,7 @@ import java.util.UUID;
 @RequestMapping("${api.prefix}/products")
 public class ProductController {
     private final ProductService productService;
+    private final LocalizationUtils localizationUtils;
 
     @PostMapping("")
     public ResponseData<?> createProduct(@Valid @RequestBody ProductDTO productDTO) {
@@ -45,13 +50,13 @@ public class ProductController {
         }
     }
     @PostMapping(value = "uploads/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseData<?> uploadImages(@PathVariable("id") Long productId,
+    public ResponseEntity<?> uploadImages(@PathVariable("id") Long productId,
                                           @RequestParam("files") List<MultipartFile> files) {
         try {
             ProductDetailResponse existingProduct = productService.getProduct(productId);
             files = files == null ? new ArrayList<MultipartFile>() : files;
             if(files.size() > ProductImage.MAXIMUM_IMAGES_PER_PRODUCT) {
-                return new ResponseData<>(HttpStatus.BAD_REQUEST.value(), "use can only update max 5 images");
+                return ResponseEntity.badRequest().body(localizationUtils.getLocalizedMessage(MessageKeys.UPLOAD_IMAGES_MAX_5));
             }
             List<ProductImage> productImages = new ArrayList<>();
             for (MultipartFile file : files) {
@@ -59,12 +64,12 @@ public class ProductController {
                     continue;
                 }
                 // Kiểm tra kích thước file và định dạng
-                if(file.getSize() > 20 * 1024 * 1024) { // Kích thước > 20MB
-                    return new ResponseData<>(HttpStatus.PARTIAL_CONTENT.value(), "File is to large max 20MB");
+                if(file.getSize() > 10 * 1024 * 1024) { // Kích thước > 10MB
+                    return ResponseEntity.status(HttpStatus.PAYLOAD_TOO_LARGE).body(localizationUtils.getLocalizedMessage(MessageKeys.UPLOAD_IMAGES_FILE_LARGE));
                 }
                 String contentType = file.getContentType();
                 if(contentType == null || !contentType.startsWith("image/")) {
-                    return new ResponseData<>(HttpStatus.UNSUPPORTED_MEDIA_TYPE.value(), "File must be an image");
+                    return ResponseEntity.status(HttpStatus.UNSUPPORTED_MEDIA_TYPE).body(localizationUtils.getLocalizedMessage(MessageKeys.UPLOAD_IMAGES_FILE_MUST_BE_IMAGE));
                 }
                 // Lưu file và cập nhật thumbnail trong DTO
                 String filename = storeFile(file); // Thay thế hàm này với code của bạn để lưu file
@@ -77,10 +82,28 @@ public class ProductController {
                 );
                 productImages.add(productImage);
             }
-            return new ResponseData<>(HttpStatus.ACCEPTED.value(), "upload product images successfully", productImages);
+            return ResponseEntity.ok().body(productImages);
         } catch (Exception e) {
             log.error("errorMessage = {}", e.getMessage(), e.getCause());
-            return new ResponseError(HttpStatus.BAD_REQUEST.value(), "upload product images fail");
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @GetMapping("/images/{imageName}")
+    public ResponseEntity<?> viewImage(@PathVariable String imageName) {
+        try {
+            java.nio.file.Path imagePath = Paths.get("uploads/"+imageName);
+            UrlResource resource = new UrlResource(imagePath.toUri());
+
+            if (resource.exists()) {
+                return ResponseEntity.ok()
+                        .contentType(MediaType.IMAGE_JPEG)
+                        .body(resource);
+            } else {
+                return ResponseEntity.notFound().build();
+            }
+        } catch (Exception e) {
+            return ResponseEntity.notFound().build();
         }
     }
 

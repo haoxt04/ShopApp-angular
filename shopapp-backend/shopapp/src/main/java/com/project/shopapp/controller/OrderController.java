@@ -1,14 +1,17 @@
 package com.project.shopapp.controller;
+import com.project.shopapp.component.LocalizationUtils;
 import com.project.shopapp.dto.request.OrderDTO;
 import com.project.shopapp.dto.response.OrderResponse;
 import com.project.shopapp.dto.response.ResponseData;
 import com.project.shopapp.dto.response.ResponseError;
 import com.project.shopapp.model.Order;
 import com.project.shopapp.service.impl.OrderService;
+import com.project.shopapp.utils.MessageKeys;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
@@ -18,6 +21,7 @@ import java.util.List;
 @RequestMapping("${api.prefix}/orders")
 public class OrderController {
     private final OrderService orderService;
+    private final LocalizationUtils localizationUtils;
 
     @PostMapping("")
     public ResponseData<OrderResponse> createOrder(@Valid @RequestBody OrderDTO order) {
@@ -74,15 +78,15 @@ public class OrderController {
         return new ResponseData<>(HttpStatus.ACCEPTED.value(), "get list of order successfully", null);
     }
     @DeleteMapping("/{orderId}")
-    public ResponseData<?> deleteOrder(@Valid @PathVariable("orderId") Long id) {
+    public ResponseEntity<?> deleteOrder(@Valid @PathVariable("orderId") Long id) {
         // xóa mềm => cập nhật trường active = false
         try {
             log.info("Delete order by id = {}", id);
             orderService.deleteOrder(id);
-            return new ResponseData<>(HttpStatus.NO_CONTENT.value(), "delete order successfully with id = " + id);
+            return ResponseEntity.ok(localizationUtils.getLocalizedMessage(MessageKeys.DELETE_ORDER_SUCCESSFULLY));
         }catch (Exception e) {
             log.error("errorMessage = {}", e.getMessage(), e.getCause());
-            return new ResponseError(HttpStatus.BAD_REQUEST.value(), "delete order by user id fail");
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 }

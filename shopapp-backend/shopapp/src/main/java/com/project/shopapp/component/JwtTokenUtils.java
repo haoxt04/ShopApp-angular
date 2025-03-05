@@ -21,7 +21,7 @@ import java.util.function.Function;
 @Component
 @RequiredArgsConstructor
 @Slf4j
-public class JwtTokenUtil {
+public class JwtTokenUtils {
 
     @Value("${jwt.expiration}")
     private Long expiration;     // save to environment variable
