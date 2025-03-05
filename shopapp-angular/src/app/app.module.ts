@@ -33,8 +33,8 @@ import { provideHttpClient } from '@angular/common/http';
     // DetailProductComponent,
     // OrderComponent,
     // OrderConfirmComponent,
-    // LoginComponent,
-    RegisterComponent
+    LoginComponent,
+    // RegisterComponent
   ]
 })
 export class AppModule { }
