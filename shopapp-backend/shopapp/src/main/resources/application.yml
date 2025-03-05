@@ -8,6 +8,10 @@ spring:
     multipart:
       max-file-size: 30MB
       max-request-size: 30MB
+  messages:
+    basename: i18n/messages
+    encoding: UTF-8
+    default-locale: en
   jpa:
     show-sql: true
     hibernate:

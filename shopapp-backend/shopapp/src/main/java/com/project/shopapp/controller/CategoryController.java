@@ -1,18 +1,25 @@
 package com.project.shopapp.controller;
 import com.project.shopapp.dto.request.CategoryDTO;
+import com.project.shopapp.dto.response.LoginResponse;
 import com.project.shopapp.dto.response.ResponseData;
 import com.project.shopapp.dto.response.ResponseError;
+import com.project.shopapp.dto.response.UpdateCategoryResponse;
 import com.project.shopapp.model.Category;
 import com.project.shopapp.model.Order;
 import com.project.shopapp.service.impl.CategoryService;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.MessageSource;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.LocaleResolver;
 
 import java.util.List;
+import java.util.Locale;
 
 @RestController
 @RequestMapping("${api.prefix}/categories")
@@ -20,6 +27,8 @@ import java.util.List;
 public class CategoryController {
     private static final Logger log = LoggerFactory.getLogger(CategoryController.class);
     private final CategoryService categoryService;
+    private final MessageSource messageSource;
+    private final LocaleResolver localeResolver;
 
     @PostMapping("")
     public ResponseData<Long> createCategory(@Valid @RequestBody CategoryDTO category) {
@@ -34,14 +43,22 @@ public class CategoryController {
     }
 
     @PutMapping("/{cateId}")
-    public ResponseData<?> updateCategory(@Valid @PathVariable("cateId") Long id, @Valid @RequestBody CategoryDTO category) {
+    public ResponseEntity<UpdateCategoryResponse> updateCategory(@Valid @PathVariable("cateId") Long id, @Valid @RequestBody CategoryDTO category, HttpServletRequest request) {
         log.info("Request update category = {}", category.getName());
         try {
             categoryService.updateCategory(id, category);
-            return new ResponseData<>(HttpStatus.ACCEPTED.value(), "category update successfully with id = " + id);
+            Locale locale = localeResolver.resolveLocale(request);
+            return ResponseEntity.ok(UpdateCategoryResponse.builder()
+                            .message(messageSource.getMessage("category.update_category.update_successfully", null, locale))
+
+                    .build());
         } catch (Exception e) {
             log.error("errorMessage = {}", e.getMessage(), e.getCause());
-            return new ResponseError(HttpStatus.BAD_REQUEST.value(), "update category fail");
+            return ResponseEntity.badRequest().body(
+                    UpdateCategoryResponse.builder()
+                            .message(e.getMessage())
+                            .build()
+            );
         }
     }
 
