@@ -12,11 +12,13 @@ import com.project.shopapp.repository.CategoryRepository;
 import com.project.shopapp.repository.ProductImageRepository;
 import com.project.shopapp.repository.ProductRepository;
 import com.project.shopapp.service.IProductService;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -62,6 +64,7 @@ public class ProductService implements IProductService {
     @Override
     public ProductListResponse getAllProducts(int page, int limit) {
         Pageable pageable = PageRequest.of(page, limit);
+        Sort.by("id").ascending();
 
         Page<Product> productsPage = productRepository.findAll(pageable);
 
@@ -80,6 +83,7 @@ public class ProductService implements IProductService {
     }
 
     @Override
+    @Transactional
     public void updateProduct(Long id, ProductDTO productDTO) {
         Product product = getProductById(id);
         product.setName(productDTO.getName());
@@ -91,6 +95,7 @@ public class ProductService implements IProductService {
     }
 
     @Override
+    @Transactional
     public void deleteProduct(Long id) {
         productRepository.deleteById(id);
         log.info("product deleted, proId =  {}", id);

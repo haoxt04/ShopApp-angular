@@ -10,6 +10,7 @@ import com.project.shopapp.repository.OrderRepository;
 import com.project.shopapp.repository.UserRepository;
 import com.project.shopapp.service.IOrderService;
 import jakarta.annotation.PostConstruct;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -63,6 +64,7 @@ public class OrderService implements IOrderService {
     }
 
     @Override
+    @Transactional
     public Order updateOrder(Long id, OrderDTO orderDTO) {
         Order order = getOrder(id);
         User existsUser = findUserById(orderDTO);
@@ -77,6 +79,7 @@ public class OrderService implements IOrderService {
     }
 
     @Override
+    @Transactional
     public void deleteOrder(Long id) {
         // xóa mềm: active = false
         log.info("order deleted, orderId =  {}", id);

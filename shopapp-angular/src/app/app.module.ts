@@ -26,7 +26,7 @@ import { TokenInterceptor } from './interceptor/token.interceptor';
   ],
   imports: [
     BrowserModule,
-    FormsModule
+    FormsModule,
   ],
   providers: [provideHttpClient(), {
     provide: HTTP_INTERCEPTORS,
@@ -34,11 +34,11 @@ import { TokenInterceptor } from './interceptor/token.interceptor';
     multi: true
   }],
   bootstrap: [
-    // HomeComponent,
+    HomeComponent,
     // DetailProductComponent,
     // OrderComponent,
     // OrderConfirmComponent,
-    LoginComponent,
+    // LoginComponent,
     // RegisterComponent
   ]
 })

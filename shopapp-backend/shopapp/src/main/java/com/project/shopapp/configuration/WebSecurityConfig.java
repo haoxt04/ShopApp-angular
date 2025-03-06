@@ -65,7 +65,7 @@ public class WebSecurityConfig {
                                     String.format("%s/products/**", apiPrefix)).permitAll()
 
                             .requestMatchers(GET,
-                                    String.format("%s/products/images/*", apiPrefix)).permitAll()
+                                    String.format("%s/products/images/**", apiPrefix)).permitAll()
 
                             .requestMatchers(POST,
                                     String.format("%s/products**", apiPrefix)).hasAnyRole(Role.ADMIN)
@@ -102,8 +102,8 @@ public class WebSecurityConfig {
                                     String.format("%s/order_details/**", apiPrefix)).hasRole(Role.ADMIN)
 
 
-                            .anyRequest().authenticated();
-                    //.anyRequest().permitAll();
+//                            .anyRequest().authenticated();
+                    .anyRequest().permitAll();
 
                 })
                 .csrf(AbstractHttpConfigurer::disable);

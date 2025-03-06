@@ -5,6 +5,7 @@ import com.project.shopapp.exception.ResourceNotFoundException;
 import com.project.shopapp.model.Category;
 import com.project.shopapp.repository.CategoryRepository;
 import com.project.shopapp.service.ICategoryService;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -49,6 +50,7 @@ public class CategoryService implements ICategoryService {
     }
 
     @Override
+    @Transactional
     public void updateCategory(Long id, CategoryDTO request) {
         Category cate = getCategoryById(id);
         cate.setId(request.getId());
@@ -58,6 +60,7 @@ public class CategoryService implements ICategoryService {
     }
 
     @Override
+    @Transactional
     public void deleteCategory(Long id) {
         categoryRepository.deleteById(id);
         log.info("cate deleted, cateId =  {}", id);

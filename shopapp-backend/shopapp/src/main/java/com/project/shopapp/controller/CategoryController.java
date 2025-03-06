@@ -87,7 +87,7 @@ public class CategoryController {
         }
     }
 
-    @GetMapping("/list")
+    @GetMapping("")
     public ResponseData<List<Category>> getAllCategories(@RequestParam(defaultValue = "0", required = false) int page,
                                                          @RequestParam(defaultValue = "1", required = false) int limit) {
         log.info("Request get list categories");
