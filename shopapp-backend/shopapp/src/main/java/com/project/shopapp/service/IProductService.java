@@ -14,7 +14,7 @@ public interface IProductService {
 
     ProductDetailResponse getProduct(Long id);
 
-    ProductListResponse getAllProducts(int page, int limit);
+    ProductListResponse getAllProducts(String keyword, Long cateId, int page, int limit);
 
     void updateProduct(Long id, ProductDTO productDTO);
 

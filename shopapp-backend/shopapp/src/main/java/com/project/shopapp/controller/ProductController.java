@@ -144,10 +144,12 @@ public class ProductController {
     }
 
     @GetMapping("")
-    public ResponseData<ProductListResponse> getProducts(@RequestParam(defaultValue = "0", required = false) int page,
+    public ResponseData<ProductListResponse> getProducts(@RequestParam(defaultValue = "") String keyword,
+                                                         @RequestParam(defaultValue = "0", name = "category_id") Long categoryId,
+                                                         @RequestParam(defaultValue = "0", required = false) int page,
                                                          @RequestParam(defaultValue = "1", required = false) int limit) {
         try {
-            return new ResponseData<>(HttpStatus.ACCEPTED.value(), "get list of products successfully", productService.getAllProducts(page, limit));
+            return new ResponseData<>(HttpStatus.ACCEPTED.value(), "get list of products successfully", productService.getAllProducts(keyword, categoryId, page, limit));
         }catch (Exception e) {
             log.error("errorMessage = {}", e.getMessage(), e.getCause());
             return new ResponseError(HttpStatus.BAD_REQUEST.value(), "get list products fail");

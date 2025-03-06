@@ -74,7 +74,7 @@ public class OrderController {
 
     @GetMapping("")
     public ResponseData<List<OrderDTO>> getListOfOrder(@RequestParam(defaultValue = "0", required = false) int page,
-                                            @RequestParam(defaultValue = "0", required = false) int limit) {
+                                            @RequestParam(defaultValue = "1", required = false) int limit) {
         return new ResponseData<>(HttpStatus.ACCEPTED.value(), "get list of order successfully", null);
     }
     @DeleteMapping("/{orderId}")

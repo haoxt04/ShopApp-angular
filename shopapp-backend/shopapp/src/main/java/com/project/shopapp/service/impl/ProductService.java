@@ -62,11 +62,11 @@ public class ProductService implements IProductService {
 
 
     @Override
-    public ProductListResponse getAllProducts(int page, int limit) {
+    public ProductListResponse getAllProducts(String keyword, Long cateId, int page, int limit) {
         Pageable pageable = PageRequest.of(page, limit);
         Sort.by("id").ascending();
 
-        Page<Product> productsPage = productRepository.findAll(pageable);
+        Page<Product> productsPage = productRepository.searchProducts(cateId, keyword, pageable);
 
         List<ProductDetailResponse> productList = productsPage.stream().map(product -> ProductDetailResponse.builder()
                 .id(product.getId())

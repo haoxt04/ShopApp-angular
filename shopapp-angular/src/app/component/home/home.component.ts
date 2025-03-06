@@ -36,11 +36,11 @@ export class HomeComponent implements OnInit {
       this.currentPage,
       this.itemsPerPage
     );
-    this.getCategories(1, 100);
+    this.getCategories(this.keyword, this.currentPage, this.itemsPerPage);
   }
 
-  getCategories(page: number, limit: number) {
-    this.categoryService.getCategories(page, limit).subscribe({
+  getCategories(keyword:string, page: number, limit: number) {
+    this.categoryService.getCategories(keyword, page, limit).subscribe({
       next: (categories: Category[]) => {
         debugger;
         this.categories = Array.isArray(categories) ? categories : []
@@ -55,7 +55,7 @@ export class HomeComponent implements OnInit {
   }
 
   searchProducts() {
-    this.currentPage = 1;
+    this.currentPage = 0;
     this.itemsPerPage = 12;
     debugger;
     this.getProducts(
