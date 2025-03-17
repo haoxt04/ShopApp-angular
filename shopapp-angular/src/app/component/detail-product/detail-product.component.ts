@@ -40,7 +40,7 @@ export class DetailProductComponent implements OnInit {
           debugger  
           if (response.product_images && response.product_images.length > 0) {
             response.product_images.forEach((product_image: ProductImage) => {
-              product_image.image_url = `${environment.apiBaseUrl}/products/images/${product_image.image_url}`;
+              product_image.imageUrl = `${environment.apiBaseUrl}/products/images/${product_image.imageUrl}`;
             });
           }            
           debugger

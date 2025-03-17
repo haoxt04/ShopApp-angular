@@ -22,6 +22,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -58,6 +59,14 @@ public class ProductService implements IProductService {
                 .thumbnail(product.getThumbnail())
                 .categoryId(product.getCategory().getId())
                 .build();
+    }
+
+    public Product getProductWithId(Long id) {
+        Optional<Product> optionalProduct = productRepository.getDetailProduct(id);
+        if(optionalProduct.isPresent()) {
+            return optionalProduct.get();
+        }
+        throw new ResourceNotFoundException("Cannot find product with id =" + id);
     }
 
 

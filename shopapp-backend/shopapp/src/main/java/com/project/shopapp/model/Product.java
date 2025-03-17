@@ -1,9 +1,11 @@
 package com.project.shopapp.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.Date;
+import java.util.List;
 
 @Table(name = "products")
 @Entity
@@ -29,4 +31,8 @@ public class Product extends BaseEntity {
     @ManyToOne
     @JoinColumn(name = "category_id")
     private Category category;
+
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonIgnore
+    private List<ProductImage> productImages;
 }

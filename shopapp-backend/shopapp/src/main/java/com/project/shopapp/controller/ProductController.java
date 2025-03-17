@@ -3,10 +3,7 @@ import com.github.javafaker.Faker;
 import com.project.shopapp.component.LocalizationUtils;
 import com.project.shopapp.dto.request.ProductDTO;
 import com.project.shopapp.dto.request.ProductImageDTO;
-import com.project.shopapp.dto.response.ProductDetailResponse;
-import com.project.shopapp.dto.response.ProductListResponse;
-import com.project.shopapp.dto.response.ResponseData;
-import com.project.shopapp.dto.response.ResponseError;
+import com.project.shopapp.dto.response.*;
 import com.project.shopapp.model.Product;
 import com.project.shopapp.model.ProductImage;
 import com.project.shopapp.service.impl.ProductService;
@@ -157,12 +154,12 @@ public class ProductController {
     }
 
     @GetMapping("/{proId}")
-    public ResponseData<ProductDetailResponse> getProductById(@Valid @PathVariable("proId") Long id) {
+    public ResponseEntity<?> getProductById(@Valid @PathVariable("proId") Long id) {
         try {
-            return new ResponseData<>(HttpStatus.ACCEPTED.value(), "get product successfully with id = " + id, productService.getProduct(id));
+            Product existingProduct = productService.getProductWithId(id);
+            return ResponseEntity.ok(ProductResponse.fromProduct(existingProduct));
         }catch (Exception e) {
-            log.error("errorMessage = {}", e.getMessage(), e.getCause());
-            return new ResponseError(HttpStatus.BAD_REQUEST.value(), "get product fail");
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 
