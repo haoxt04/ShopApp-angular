@@ -22,10 +22,8 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.UUID;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
@@ -158,6 +156,20 @@ public class ProductController {
         try {
             Product existingProduct = productService.getProductWithId(id);
             return ResponseEntity.ok(ProductResponse.fromProduct(existingProduct));
+        }catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @GetMapping("/by-ids")
+    public ResponseEntity<?> getProductByIds(@RequestParam("ids") String ids) {
+        try {
+            // Tách chuỗi ids thành một mảng các so nguyen
+            List<Long> productIds = Arrays.stream(ids.split(","))
+                    .map(Long::parseLong)
+                    .toList();
+            List<Product> products = productService.findProductByIds(productIds);
+            return ResponseEntity.ok(products);
         }catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }

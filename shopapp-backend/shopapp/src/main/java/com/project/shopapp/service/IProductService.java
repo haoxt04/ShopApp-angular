@@ -23,4 +23,6 @@ public interface IProductService {
     boolean existsByName(String name);
 
     ProductImage createProductImage(Long productId, ProductImageDTO productImageDTO);
+
+    List<Product> findProductByIds(List<Long> productIds);
 }

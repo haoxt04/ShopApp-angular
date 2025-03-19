@@ -131,6 +131,11 @@ public class ProductService implements IProductService {
         return productImageRepository.save(newProductImage);
     }
 
+    @Override
+    public List<Product> findProductByIds(List<Long> productIds) {
+        return productRepository.findProductByIds(productIds);
+    }
+
     private Product getProductById(Long userId) {
         return productRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("product not found"));
     }
