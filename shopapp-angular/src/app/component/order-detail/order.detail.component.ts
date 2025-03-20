@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { OrderService } from '../../service/order.service';
 import { environment } from '../../environment/environment';
+import { OrderDetail } from '../model/order.detail';
+import { OrderResponse } from '../../response/order/order.response';
 
 @Component({
   selector: 'app-order-detail',
@@ -35,7 +37,7 @@ export class OrderDetailComponent implements OnInit {
   getOrderDetails(): void {
     debugger
     const orderId = 10; // Thay bằng ID của đơn hàng bạn muốn lấy.
-    this.orderService.get(orderId).subscribe({
+    this.orderService.getOrderById(orderId).subscribe({
       next: (response: any) => {        
         debugger;       
         this.orderResponse.id = response.id;
@@ -52,7 +54,7 @@ export class OrderDetailComponent implements OnInit {
         );        
         
         this.orderResponse.order_details = response.order_details
-          .map((order_detail: ) => {
+          .map((order_detail: OrderDetail) => {
           order_detail.product.thumbnail = `${environment.apiBaseUrl}/products/images/${order_detail.product.thumbnail}`;
           return order_detail;
         });        
