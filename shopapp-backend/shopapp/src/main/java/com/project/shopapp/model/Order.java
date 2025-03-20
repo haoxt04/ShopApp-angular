@@ -1,11 +1,13 @@
 package com.project.shopapp.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Date;
+import java.util.List;
 
 @Table(name = "orders")
 @Getter
@@ -63,4 +65,8 @@ public class Order extends BaseEntity{
     private String paymentMethod;
 
     private boolean active;     // thuộc về admin
+
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonManagedReference
+    private List<OrderDetail> orderDetails;
 }
