@@ -48,14 +48,14 @@ public class OrderController {
         }
     }
     @GetMapping("/{orderId}")
-    public ResponseData<?> getOrderById(@Valid @PathVariable("orderId") Long id) {
+    public ResponseEntity<?> getOrderById(@Valid @PathVariable("orderId") Long id) {
         try {
             log.info("Get product by id = {}", id);
-            Order order = orderService.getOrder(id);
-            return new ResponseData<>(HttpStatus.ACCEPTED.value(), "get product by id successfully", order);
+            Order exsistingOrder = orderService.getOrder(id);
+            OrderResponse orderResponse = OrderResponse.fromOrder(exsistingOrder);
+            return ResponseEntity.ok(orderResponse);
         }catch (Exception e) {
-            log.error("errorMessage = {}", e.getMessage(), e.getCause());
-            return new ResponseError(HttpStatus.BAD_REQUEST.value(), "get order by id fail");
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 

@@ -64,7 +64,7 @@ public class OrderService implements IOrderService {
         }
         order.setShippingDate(shippingDate);
         order.setActive(true);//đoạn này nên set sẵn trong sql
-        order.setTotalMoney(String.valueOf(orderDTO.getTotalMoney()));
+        order.setTotalMoney(orderDTO.getTotalMoney());
         orderRepository.save(order);
         // Tạo danh sách các đối tượng OrderDetail từ cartItems
         List<OrderDetail> orderDetails = new ArrayList<>();
@@ -153,7 +153,7 @@ public class OrderService implements IOrderService {
                 .note(order.getNote())
                 .orderDate(order.getOrderDate())
                 .status(order.getStatus())
-                .totalMoney(Float.parseFloat(order.getTotalMoney()))
+                .totalMoney(order.getTotalMoney())
                 .shippingMethod(order.getShippingMethod())
                 .shippingAddress(order.getShippingAddress())
                 .shippingDate(order.getShippingDate())

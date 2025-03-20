@@ -1,5 +1,6 @@
 package com.project.shopapp.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
@@ -47,7 +48,7 @@ public class Order extends BaseEntity{
     private String status;
 
     @Column(name = "total_money")
-    private String totalMoney;
+    private float totalMoney;
 
     @Column(name = "shipping_method")
     private String shippingMethod;

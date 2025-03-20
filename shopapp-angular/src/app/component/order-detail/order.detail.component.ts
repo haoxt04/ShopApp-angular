@@ -5,12 +5,12 @@ import { Product } from '../model/product';
 import { environment } from '../../environment/environment';
 
 @Component({
-  selector: 'app-order-confirm',
+  selector: 'app-order-detail',
   standalone: false,
-  templateUrl: './order-confirm.component.html',
-  styleUrl: './order-confirm.component.scss'
+  templateUrl: './order.detail.component.html',
+  styleUrl: './order.detail.component.scss'
 })
-export class OrderConfirmComponent implements OnInit {
+export class OrderDetailComponent implements OnInit {
   cartItems: { product: Product, quantity : number} [] = [];
   couponCode: string = '';  // Mã giảm giá
   totalAmount: number = 0;  // tổng tiền
