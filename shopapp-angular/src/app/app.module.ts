@@ -10,6 +10,8 @@ import { LoginComponent } from './component/login/login.component';
 import { RegisterComponent } from './component/register/register.component';
 import { FormsModule } from '@angular/forms';
 import { provideHttpClient, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { AppRoutingModule } from './app-routing.module';
+import { AppComponent } from './app/app.component';
 import { TokenInterceptor } from './interceptor/token.interceptor';
 import { ReactiveFormsModule } from '@angular/forms';
 
@@ -23,12 +25,14 @@ import { ReactiveFormsModule } from '@angular/forms';
     OrderComponent,
     OrderDetailComponent,
     LoginComponent,
-    RegisterComponent
+    RegisterComponent,
+    AppComponent
   ],
   imports: [
     ReactiveFormsModule,
     BrowserModule,
     FormsModule,
+    AppRoutingModule
   ],
   providers: [provideHttpClient(), {
     provide: HTTP_INTERCEPTORS,
@@ -36,10 +40,11 @@ import { ReactiveFormsModule } from '@angular/forms';
     multi: true
   }],
   bootstrap: [
+    AppComponent
     // HomeComponent,
     // DetailProductComponent,
-    OrderComponent,
-    // OrderConfirmComponent,
+    // OrderComponent,
+    // OrderDetailComponent,
     // LoginComponent,
     // RegisterComponent
   ]
