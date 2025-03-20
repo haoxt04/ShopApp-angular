@@ -11,6 +11,7 @@ import { RegisterComponent } from './component/register/register.component';
 import { FormsModule } from '@angular/forms';
 import { provideHttpClient, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { TokenInterceptor } from './interceptor/token.interceptor';
+import { ReactiveFormsModule } from '@angular/forms';
 
 
 @NgModule({
