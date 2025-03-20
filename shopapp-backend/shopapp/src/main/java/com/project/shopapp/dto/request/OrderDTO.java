@@ -8,6 +8,7 @@ import lombok.Builder;
 import lombok.Data;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Data
 @Builder
@@ -50,5 +51,6 @@ public class OrderDTO {
     @NotNull(message = "payment method must be not null")
     private String paymentMethod;
 
-
+    @JsonProperty("cart_items")
+    private List<CartItemDTO> cartItems;
 }

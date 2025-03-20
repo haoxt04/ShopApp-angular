@@ -24,14 +24,14 @@ public class OrderController {
     private final LocalizationUtils localizationUtils;
 
     @PostMapping("")
-    public ResponseData<OrderResponse> createOrder(@Valid @RequestBody OrderDTO order) {
+    public ResponseEntity<?> createOrder(@Valid @RequestBody OrderDTO orderDTO) {
         try {
-            log.info("Request create order = {}", order.getFullName());
-            Order newOrder =  orderService.createOrder(order);
-            return new ResponseData<>(HttpStatus.CREATED.value(), "order create successfully", orderService.convertToOrderResponse(newOrder));
+            log.info("Request create order = {}", orderDTO.getFullName());
+            Order orderResponse = orderService.createOrder(orderDTO);
+            return ResponseEntity.ok(orderResponse);
         }catch (Exception e) {
             log.error("errorMessage = {}", e.getMessage(), e.getCause());
-            return new ResponseError(HttpStatus.BAD_REQUEST.value(), "create order fail");
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 
