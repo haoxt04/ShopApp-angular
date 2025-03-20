@@ -26,6 +26,7 @@ import { ReactiveFormsModule } from '@angular/forms';
     RegisterComponent
   ],
   imports: [
+    ReactiveFormsModule,
     BrowserModule,
     FormsModule,
   ],
