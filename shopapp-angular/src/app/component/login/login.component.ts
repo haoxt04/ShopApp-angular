@@ -7,6 +7,7 @@ import { LoginResponse } from '../../response/user/login.response';
 import { TokenService } from '../../service/token.service';
 import { RoleService } from '../../service/role.service';
 import { Role } from '../model/role';
+import { UserResponse } from '../../response/user/user.reponse';
 
 @Component({
   selector: 'app-login',
@@ -22,6 +23,7 @@ export class LoginComponent {
   roles: Role[] = [];  // Mảng role
   rememberMe: boolean = true;
   selectedRole: Role | undefined;   // Biến lưu giá trị từ dropdown
+  userResponse?: UserResponse;
 
   onPhoneNumberChange() {
     console.log(`Phone typed: ${this.phoneNumber}`);
@@ -62,13 +64,31 @@ export class LoginComponent {
       next: (response: LoginResponse) => {
         debugger
         const {token} = response
-        this.tokenService.setToken(token);
+        if(this.rememberMe) {
+          this.tokenService.setToken(token);
+          this.userService.getUserDetail(token).subscribe({
+            next: (response: any) => {
+              debugger
+              this.userResponse = {
+                ...response,
+                date_of_birth: new Date(response.date_of_birth),
+              };
+              this.userService.saveUserResponseToLocalStorage(this.userResponse)
+              this.router.navigate(["/"]);
+            },
+            complete: () => {
+              debugger;
+            },
+            error: (error: any) => {
+              alert(`Cannot login, error: ${error.error}`);
+            }
+          })
+        }
       },
       complete: () => {
         debugger;
       },
       error: (error: any) => {
-        // xử lý lỗi nếu có
         alert(`Cannot login, error: ${error.error}`);
       },
     });
