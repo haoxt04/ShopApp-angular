@@ -52,6 +52,7 @@ export class LoginComponent {
   }
 
   login() {
+    console.log("login đã được gọi")
     const message =
       `phoneNumber : ${this.phoneNumber}` +
       `password: ${this.password}`;
@@ -62,35 +63,24 @@ export class LoginComponent {
     };
     this.userService.login(loginDTO).subscribe({
       next: (response: LoginResponse) => {
-        debugger
-        const {token} = response
-        if(this.rememberMe) {
-          this.tokenService.setToken(token);
-          this.userService.getUserDetail(token).subscribe({
-            next: (response: any) => {
-              debugger
-              this.userResponse = {
-                ...response,
-                date_of_birth: new Date(response.date_of_birth),
-              };
-              this.userService.saveUserResponseToLocalStorage(this.userResponse)
-              this.router.navigate(["/"]);
-            },
-            complete: () => {
-              debugger;
-            },
-            error: (error: any) => {
-              alert(`Cannot login, error: ${error.error}`);
-            }
-          })
-        }
-      },
-      complete: () => {
         debugger;
-      },
-      error: (error: any) => {
-        alert(`Cannot login, error: ${error.error}`);
-      },
+        const token = response.token;   // Lấy token từ reponse
+        
+        this.userService.getUserDetail(token).subscribe({
+          next: (response: any) => {
+            debugger;
+            this.userResponse = {
+              ...response,
+              date_of_birth: new Date(response.date_of_birth),
+            };
+            this.userService.saveUserResponseToLocalStorage(this.userResponse);
+            this.router.navigate(["/"]);
+          },
+          error: (error: any) => {
+            alert(`Cannot login, error:  ${error.error}`)
+          }
+        });
+      }
     });
   }
 }

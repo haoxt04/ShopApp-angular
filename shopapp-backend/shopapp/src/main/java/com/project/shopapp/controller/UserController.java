@@ -9,7 +9,6 @@ import com.project.shopapp.utils.MessageKeys;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.catalina.connector.Response;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -58,7 +57,7 @@ public class UserController {
         }
     }
 
-    @PostMapping("/details")
+    @GetMapping("/details")
     public ResponseEntity<UserResponse> getUserDetails(@RequestHeader("Authorization") String token) {
         try {
             String extractedToken = token.substring(7);     // Loại bỏ "Bearer " tu token

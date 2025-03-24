@@ -6,6 +6,8 @@ import { environment } from '../../environment/environment';
 import { OrderDTO } from '../../dto/order/order.dto';
 import { OrderService } from '../../service/order.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { TokenService } from '../../service/token.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-order',
@@ -33,7 +35,9 @@ export class OrderComponent {
   };
 
   constructor(
+    private tokenService: TokenService,
     private cartService: CartService,
+    private router: Router,
     private productService: ProductService,
     private orderService: OrderService,
     private fb: FormBuilder
@@ -51,12 +55,18 @@ export class OrderComponent {
   }
 
 ngOnInit(): void {
+    debugger
+    this.cartService.clearCart();
+    this.orderData.user_id = this.tokenService.getUserId();
     // Lấy danh sách sản phẩm từ phần giỏ hàng
     debugger
     const cart = this.cartService.getCart();
     const productIds = Array.from(cart.keys());   // chuyển danh sách id từ Map giỏ hàng
     // Gọi service để lấy thông tin sản phẩm dựa trên id
     debugger
+    if(productIds.length === 0) {
+      return;
+    }
     this.productService.getProductByIds(productIds).subscribe({
       next: (products) => {
         debugger
@@ -111,6 +121,8 @@ ngOnInit(): void {
         next: (response) => {
           debugger;
           console.log('Đặt hàng thành công');
+          this.cartService.clearCart();
+          this.router.navigate(['/orders/', response.id]);
         },
         complete: () => {
           debugger;
