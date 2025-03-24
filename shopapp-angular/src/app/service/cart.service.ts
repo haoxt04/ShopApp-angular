@@ -28,13 +28,14 @@ export class CartService {
         // sau khi thay đổi giỏ hàng lưu nó vào localStorage
         this.saveCartToLocalStorage();
     }
+
+    getCart(): Map<number, number> {
+        return this.cart;
+    }
     // lưu giỏ hàng vào localStorage
     saveCartToLocalStorage():void {
         debugger
         localStorage.setItem('cart', JSON.stringify(Array.from(this.cart.entries())));
-    }
-    getCart(): Map<number, number> {
-        return this.cart;
     }
     // Hàm xóa dữ liệu giỏ hàng và cập nhật Local Storage
     clearCart(): void {

@@ -12,7 +12,7 @@ const routes: Routes = [
     { path: '', component: HomeComponent},
     { path: 'login', component: LoginComponent},
     { path: 'register', component : RegisterComponent},
-    { path: 'products/:id', component: DetailProductComponent},
+    { path: 'detail-product/:id', component: DetailProductComponent},
     { path: 'orders', component: OrderComponent},
     { path: 'orders/:id', component: OrderDetailComponent}
 ]

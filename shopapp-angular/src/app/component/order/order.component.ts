@@ -44,19 +44,19 @@ export class OrderComponent {
   ) {
     // Tạo FormGroup và các FormControl tương ứng
     this.orderForm = this.fb.group({
-      fullname: ['nguyen van a', Validators.required], // fullname là FormControl bắt buộc      
-      email: ['vana@gmail.com', [Validators.email]], // Sử dụng Validators.email cho kiểm tra định dạng email
-      phone_number: ['11445547', [Validators.required, Validators.minLength(6)]], // phone_number bắt buộc và ít nhất 6 ký tự
-      address: ['tp hcm', [Validators.required, Validators.minLength(5)]], // address bắt buộc và ít nhất 5 ký tự
-      note: ['dễ vỡ'],
-      shipping_method: ['express'],
-      payment_method: ['cod']
+      fullname: ['', Validators.required], // fullname là FormControl bắt buộc      
+      email: ['', [Validators.email]], // Sử dụng Validators.email cho kiểm tra định dạng email
+      phone_number: ['', [Validators.required, Validators.minLength(6)]], // phone_number bắt buộc và ít nhất 6 ký tự
+      address: ['', [Validators.required, Validators.minLength(5)]], // address bắt buộc và ít nhất 5 ký tự
+      note: [''],
+      shipping_method: [''],
+      payment_method: ['']
     });
   }
 
 ngOnInit(): void {
     debugger
-    this.cartService.clearCart();
+    // this.cartService.clearCart();
     this.orderData.user_id = this.tokenService.getUserId();
     // Lấy danh sách sản phẩm từ phần giỏ hàng
     debugger
@@ -116,21 +116,22 @@ ngOnInit(): void {
         product_id: cartItem.product.id,
         quantity: cartItem.quantity
       }));
+      this.calculateTotal();
+      this.orderData.total_money = this.totalAmount;
       // Dữ liệu hợp lệ, bạn có thể gửi đơn hàng đi
       this.orderService.placeOrder(this.orderData).subscribe({
         next: (response) => {
           debugger;
-          console.log('Đặt hàng thành công');
+          alert('Đặt hàng thành công');
           this.cartService.clearCart();
-          this.router.navigate(['/orders/', response.id]);
+          this.router.navigate(['/']);
         },
         complete: () => {
           debugger;
-          this.calculateTotal();
         },
         error: (error: any) => {
           debugger;
-          console.error('Lỗi khi đặt hàng:', error);
+          alert(`Lỗi khi đặt hàng: ${error}`);
         },
       });
     } else {
@@ -144,5 +145,10 @@ ngOnInit(): void {
       (total, item) => total + item.product.price * item.quantity,
       0
     );
+  }
+
+  // Hàm xử lý mã giảm giá
+  applyCoupon(): void {
+    // Cập nhật giá trị totalAmount dựa trên mã giảm giá nếu áp dụng
   }
 }

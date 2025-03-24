@@ -1,4 +1,5 @@
 package com.project.shopapp.component;
+import com.project.shopapp.exception.InvalidParamException;
 import com.project.shopapp.model.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -29,22 +30,24 @@ public class JwtTokenUtils {
     @Value("${jwt.secretKey}")
     private String secretKey;
 
-    public String generateToken(User user) {
-        // properties => claims
+    public String generateToken(User user) throws Exception{
+        //properties => claims
         Map<String, Object> claims = new HashMap<>();
         //this.generateSecretKey();
         claims.put("phoneNumber", user.getPhoneNumber());
+        claims.put("userId", user.getId());
         try {
             String token = Jwts.builder()
-                    .setClaims(claims)    // how to extract claims from this ?
+                    .setClaims(claims) //how to extract claims from this ?
                     .setSubject(user.getPhoneNumber())
                     .setExpiration(new Date(System.currentTimeMillis() + expiration * 1000L))
                     .signWith(getSignInKey(), SignatureAlgorithm.HS256)
                     .compact();
             return token;
         }catch (Exception e) {
-            log.error("cannot read jwt token: {}", e.getMessage(), e.getCause());
-            return null;
+            //you can "inject" Logger, instead System.out.println
+            throw new InvalidParamException("Cannot create jwt token, error: "+e.getMessage());
+            //return null;
         }
     }
 

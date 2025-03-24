@@ -44,42 +44,64 @@ export class LoginComponent {
         this.roles = roles;
         this.selectedRole = roles.length > 0 ? roles[0] : undefined;
       },
+      complete: () => {
+        debugger
+      },
       error: (error: any) => {
         debugger
         console.error('Error getting roles: ', error);
       }
     });
   }
+  createAccount() {
+    debugger
+    // Chuyển hướng người dùng đến trang đăng ký (hoặc trang tạo tài khoản)
+    this.router.navigate(['/register']); 
+  }
 
   login() {
-    console.log("login đã được gọi")
     const message =
       `phoneNumber : ${this.phoneNumber}` +
       `password: ${this.password}`;
 
     const loginDTO: LoginDTO = {
       "phone_number": this.phoneNumber,
-      "password": this.password
+      "password": this.password,
+      "role_id": this.selectedRole?.id ?? 1
     };
     this.userService.login(loginDTO).subscribe({
       next: (response: LoginResponse) => {
         debugger;
-        const token = response.token;   // Lấy token từ reponse
-        
-        this.userService.getUserDetail(token).subscribe({
-          next: (response: any) => {
-            debugger;
-            this.userResponse = {
-              ...response,
-              date_of_birth: new Date(response.date_of_birth),
-            };
-            this.userService.saveUserResponseToLocalStorage(this.userResponse);
-            this.router.navigate(["/"]);
-          },
-          error: (error: any) => {
-            alert(`Cannot login, error:  ${error.error}`)
-          }
-        });
+        const { token } = response;
+        if (this.rememberMe) {          
+          this.tokenService.setToken(token);
+          debugger;
+          this.userService.getUserDetail(token).subscribe({
+            next: (response: any) => {
+              debugger
+              this.userResponse = {
+                ...response,
+                date_of_birth: new Date(response.date_of_birth),
+              };    
+              this.userService.saveUserResponseToLocalStorage(this.userResponse); 
+              this.router.navigate(['/']);                      
+            },
+            complete: () => {
+              debugger;
+            },
+            error: (error: any) => {
+              debugger;
+              alert(error.error.message);
+            }
+          })
+        }                        
+      },
+      complete: () => {
+        debugger;
+      },
+      error: (error: any) => {
+        debugger;
+        alert(error.error.message);
       }
     });
   }

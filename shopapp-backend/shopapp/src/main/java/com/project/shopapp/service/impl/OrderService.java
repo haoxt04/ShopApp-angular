@@ -64,10 +64,10 @@ public class OrderService implements IOrderService {
         }
         order.setShippingDate(shippingDate);
         order.setActive(true);//đoạn này nên set sẵn trong sql
-        order.setTotalMoney(orderDTO.getTotalMoney());
-        orderRepository.save(order);
+
         // Tạo danh sách các đối tượng OrderDetail từ cartItems
         List<OrderDetail> orderDetails = new ArrayList<>();
+        float totalMoney = 0;
         for (CartItemDTO cartItemDTO : orderDTO.getCartItems()) {
             // Tạo một đối tượng OrderDetail từ CartItemDTO
             OrderDetail orderDetail = new OrderDetail();
@@ -87,12 +87,18 @@ public class OrderService implements IOrderService {
             // Các trường khác của OrderDetail nếu cần
             orderDetail.setPrice(product.getPrice());
 
+            // Tính tổng tiền từng sản phẩm
+            float itemTotal = product.getPrice() * cartItemDTO.getQuantity();
+            orderDetail.setTotalMoney(itemTotal);
+            totalMoney += itemTotal;
+
             // Thêm OrderDetail vào danh sách
             orderDetails.add(orderDetail);
         }
-
+        order.setTotalMoney(totalMoney);
 
         // Lưu danh sách OrderDetail vào cơ sở dữ liệu
+        orderRepository.save(order);
         orderDetailRepository.saveAll(orderDetails);
         return order;
     }

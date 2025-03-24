@@ -34,14 +34,13 @@ public class OrderDTO {
 
     @JsonProperty("total_money")
     @Min(value = 0, message = "total money must be greater than 0")
-    private float totalMoney;
+    private Float totalMoney;
 
     @JsonProperty("shipping_method")
     @NotNull(message = "shipping method must be not null")
     private String shippingMethod;
 
     @JsonProperty("shipping_address")
-    @NotNull(message = "shipping address must be not null")
     private String shippingAddress;
 
     @JsonProperty("shipping_date")
