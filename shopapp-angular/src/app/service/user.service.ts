@@ -72,5 +72,15 @@ export class UserService {
       return null;  // Return null or handle the error as needed
     }
   }
+
+  removeUserFromLocalStorage() {
+    try {
+      // Remove user data from local storage using the key
+      localStorage.removeItem('user');
+      console.log('User data remove from local storage')
+    } catch (error) {
+      console.log('Error removing user data from local storage: ', error)
+    }
+  }
 }
 

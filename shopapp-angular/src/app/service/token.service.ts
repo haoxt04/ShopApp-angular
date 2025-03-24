@@ -23,7 +23,7 @@ export class TokenService {
         return 'userId' in userObject ? parseInt(userObject[('userId')]) : 0;
     }
 
-    remoteToken(): void {
+    removeToken(): void {
         localStorage.removeItem(this.TOKEN_KEY);
     }
 
