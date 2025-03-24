@@ -13,6 +13,7 @@ import { NgbPopoverConfig } from '@ng-bootstrap/ng-bootstrap';
 export class HeaderComponent implements OnInit{
   userResponse?:UserResponse | null;
   isPopoverOpen = false;
+  activeNavItem: number = 0;
 
   togglePopover(event: Event): void {
     event.preventDefault();
@@ -38,5 +39,8 @@ export class HeaderComponent implements OnInit{
    }
   ngOnInit() {
     this.userResponse = this.userService.getUserResponseFromLocalStorage();    
+  }  
+  setActiveNavItem(index: number) {    
+    this.activeNavItem = index;
   }  
 }
